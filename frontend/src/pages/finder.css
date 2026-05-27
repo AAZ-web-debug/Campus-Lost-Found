@@ -1,0 +1,46 @@
+.finder-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
+  color: white;
+}
+
+.finder-card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 16px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input, textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+  height: 80px;
+}
+
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #22c55e;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #16a34a;
+}

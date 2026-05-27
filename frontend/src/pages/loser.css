@@ -1,0 +1,27 @@
+.loser-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  padding: 50px;
+  color: white;
+  text-align: center;
+}
+
+.items-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.item-card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 16px;
+  transition: 0.3s;
+}
+
+.item-card:hover {
+  transform: scale(1.05);
+  background: rgba(255,255,255,0.25);
+}

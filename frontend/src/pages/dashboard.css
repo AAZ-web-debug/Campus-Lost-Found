@@ -1,0 +1,84 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Background */
+.dash-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  color: white;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.navbar button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #ef4444;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.navbar button:hover {
+  background: #dc2626;
+}
+
+/* Content */
+.content {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.content h1 {
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+
+/* Cards */
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.mode-card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  width: 300px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.mode-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  background: rgba(255,255,255,0.25);
+}
+
+.mode-card h2 {
+  margin-bottom: 10px;
+}
+
+.mode-card p {
+  color: #ddd;
+}

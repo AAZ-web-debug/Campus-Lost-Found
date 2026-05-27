@@ -10,17 +10,29 @@ export const register = async (userId, password) => {
 };
 
 export const login = async (userId, password) => {
-  const response = await fetch(`${API_URL}/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, password })
-  });
-  const data = await response.json();
-  if (data.token) {
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('userId', data.userId);
+  try {
+    const response = await fetch(`${API_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, password })
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.token) {
+      // ✅ store token
+      localStorage.setItem('token', data.token);
+
+      // ✅ store userId manually (since backend doesn't send it)
+      localStorage.setItem('userId', userId);
+
+      return data;
+    } else {
+      return { error: data.error || 'Login failed' };
+    }
+  } catch (err) {
+    return { error: 'Server error' };
   }
-  return data;
 };
 
 export const logout = () => {
