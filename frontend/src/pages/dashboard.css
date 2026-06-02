@@ -1,84 +1,207 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-/* Background */
-.dash-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #4f46e5, #9333ea);
-  color: white;
+.dashboard-page{
+  min-height:100vh;
+
+  background:linear-gradient(
+    135deg,
+    #4f46e5,
+    #9333ea
+  );
+
+  color:white;
 }
 
 /* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
+
+.dashboard-navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:20px 50px;
+
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);
 }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+.dashboard-logo{
+  font-size:24px;
+  font-weight:700;
 }
 
-.navbar button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  background: #ef4444;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
+.dashboard-user{
+  display:flex;
+  align-items:center;
+  gap:15px;
 }
 
-.navbar button:hover {
-  background: #dc2626;
+.logout-btn{
+  border:none;
+  padding:10px 18px;
+  border-radius:10px;
+  cursor:pointer;
+
+  background:#ef4444;
+  color:white;
 }
 
-/* Content */
-.content {
-  text-align: center;
-  margin-top: 80px;
+.logout-btn:hover{
+  background:#dc2626;
 }
 
-.content h1 {
-  font-size: 32px;
-  margin-bottom: 40px;
+/* Hero */
+
+.dashboard-hero{
+  text-align:center;
+  padding:60px 20px;
 }
 
-/* Cards */
-.card-container {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
+.dashboard-hero h1{
+  font-size:60px;
+  margin-bottom:10px;
 }
 
-.mode-card {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(10px);
-  padding: 40px;
-  width: 300px;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+.dashboard-hero p{
+  color:#e5e7eb;
+  font-size:18px;
 }
 
-.mode-card:hover {
-  transform: translateY(-10px) scale(1.03);
-  background: rgba(255,255,255,0.25);
+/* Stats */
+
+.dashboard-stats{
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  flex-wrap:wrap;
+
+  padding:20px 40px;
 }
 
-.mode-card h2 {
-  margin-bottom: 10px;
+.stat-box{
+  width:250px;
+
+  padding:30px;
+
+  text-align:center;
+
+  border-radius:20px;
+
+  background:rgba(255,255,255,0.12);
+
+  backdrop-filter:blur(15px);
+
+  box-shadow:
+  0 10px 25px rgba(0,0,0,.15);
 }
 
-.mode-card p {
-  color: #ddd;
+.stat-box h2{
+  font-size:42px;
+  margin-bottom:10px;
+}
+
+/* Actions */
+
+.dashboard-actions{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  flex-wrap:wrap;
+
+  padding:60px 40px;
+}
+
+.action-card{
+  width:340px;
+
+  padding:35px;
+
+  border-radius:24px;
+
+  cursor:pointer;
+
+  background:rgba(255,255,255,0.12);
+
+  backdrop-filter:blur(20px);
+
+  transition:.3s;
+}
+
+.action-card:hover{
+  transform:
+  translateY(-10px)
+  scale(1.03);
+}
+
+.action-icon{
+  font-size:50px;
+  margin-bottom:15px;
+}
+
+.action-card h2{
+  margin-bottom:15px;
+}
+
+.action-card p{
+  color:#e5e7eb;
+  line-height:1.6;
+}
+
+/* Activity */
+
+.activity-section{
+  padding:30px 50px 80px;
+}
+
+.activity-section h2{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.activity-grid{
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(250px,1fr));
+
+  gap:20px;
+}
+
+.activity-card{
+  padding:25px;
+
+  border-radius:18px;
+
+  text-align:center;
+
+  background:rgba(255,255,255,0.12);
+
+  backdrop-filter:blur(15px);
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+  .dashboard-navbar{
+    flex-direction:column;
+    gap:15px;
+    padding:20px;
+  }
+
+  .dashboard-hero h1{
+    font-size:42px;
+  }
+
+  .dashboard-actions{
+    padding:40px 20px;
+  }
+
+}
+.stat-box{
+  min-width:220px;
 }

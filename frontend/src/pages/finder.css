@@ -1,46 +1,125 @@
-.finder-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #6366f1, #a855f7);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 50px;
-  color: white;
+.finder-container{
+  min-height:100vh;
+
+  background:linear-gradient(
+    135deg,
+    #4f46e5,
+    #9333ea
+  );
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  padding:50px 20px;
+
+  color:white;
 }
 
-.finder-card {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(10px);
-  padding: 30px;
-  border-radius: 16px;
-  width: 350px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.finder-header{
+  text-align:center;
+  margin-bottom:30px;
 }
 
-input, textarea {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
+.finder-header h1{
+  font-size:48px;
+  margin-bottom:10px;
 }
 
-textarea {
-  resize: none;
-  height: 80px;
+.finder-header p{
+  color:#e5e7eb;
 }
 
-button {
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: #22c55e;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
+.finder-card{
+  width:100%;
+  max-width:650px;
+
+  background:rgba(255,255,255,0.12);
+
+  backdrop-filter:blur(20px);
+
+  border-radius:24px;
+
+  padding:30px;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:16px;
+
+  box-shadow:
+  0 10px 30px rgba(0,0,0,.2);
 }
 
-button:hover {
-  background: #16a34a;
+.finder-card input,
+.finder-card textarea,
+.finder-card select{
+  width:100%;
+
+  padding:14px;
+
+  border:none;
+
+  border-radius:12px;
+
+  font-size:15px;
+
+  outline:none;
+}
+
+.finder-card textarea{
+  min-height:120px;
+  resize:none;
+}
+
+.finder-card button{
+  border:none;
+
+  padding:15px;
+
+  border-radius:14px;
+
+  background:white;
+
+  color:#4f46e5;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:.3s;
+}
+
+.finder-card button:hover{
+  transform:translateY(-2px);
+}
+
+.image-preview{
+  padding:12px;
+
+  border-radius:12px;
+
+  background:rgba(255,255,255,0.1);
+
+  text-align:center;
+}
+
+@media(max-width:768px){
+
+  .finder-header h1{
+    font-size:36px;
+  }
+
+  .finder-card{
+    padding:20px;
+  }
+
+}
+.verification-box{
+  min-height:140px !important;
+  border:2px solid #f59e0b;
+}
+
+.verification-box::placeholder{
+  color:#666;
 }

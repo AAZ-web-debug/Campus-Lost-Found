@@ -1,0 +1,89 @@
+.review-container{
+
+  min-height:100vh;
+
+  background:
+  linear-gradient(
+    135deg,
+    #4f46e5,
+    #9333ea
+  );
+
+  padding:40px;
+
+  color:white;
+}
+
+.review-container h1{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.claims-grid{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(
+    auto-fit,
+    minmax(350px,1fr)
+  );
+
+  gap:25px;
+}
+
+.claim-card{
+
+  background:
+  rgba(255,255,255,0.12);
+
+  backdrop-filter:
+  blur(20px);
+
+  border-radius:20px;
+
+  padding:20px;
+}
+
+.actions{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-top:15px;
+}
+
+.approve-btn{
+
+  flex:1;
+
+  border:none;
+
+  padding:12px;
+
+  border-radius:12px;
+
+  background:#10b981;
+
+  color:white;
+
+  cursor:pointer;
+}
+
+.reject-btn{
+
+  flex:1;
+
+  border:none;
+
+  padding:12px;
+
+  border-radius:12px;
+
+  background:#ef4444;
+
+  color:white;
+
+  cursor:pointer;
+}

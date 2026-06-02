@@ -1,0 +1,356 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  background:#0f172a;
+}
+
+.landing{
+  min-height:100vh;
+  background:linear-gradient(
+    135deg,
+    #4f46e5,
+    #9333ea
+  );
+  color:white;
+}
+
+/* NAVBAR */
+
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 60px;
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.08);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:700;
+}
+
+.nav-links{
+  display:flex;
+  gap:15px;
+}
+
+.nav-links button{
+  border:none;
+  cursor:pointer;
+  padding:12px 20px;
+  border-radius:12px;
+}
+
+.signup-btn{
+  background:#8b5cf6;
+  color:white;
+}
+
+/* HERO */
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  min-height:90vh;
+  padding:60px;
+  gap:40px;
+}
+
+.hero-left{
+  flex:1;
+}
+
+.hero-badge{
+  display:inline-block;
+  background:rgba(255,255,255,0.15);
+  padding:10px 16px;
+  border-radius:999px;
+  margin-bottom:20px;
+}
+
+.hero-left h1{
+  font-size:70px;
+  margin-bottom:15px;
+}
+
+.hero-left h2{
+  font-size:32px;
+  margin-bottom:20px;
+}
+
+.hero-left p{
+  font-size:20px;
+  color:#e5e7eb;
+  max-width:600px;
+  line-height:1.7;
+}
+
+.hero-buttons{
+  margin-top:35px;
+  display:flex;
+  gap:20px;
+}
+
+.primary-btn,
+.secondary-btn{
+  padding:14px 30px;
+  border-radius:14px;
+  border:none;
+  cursor:pointer;
+  font-size:16px;
+}
+
+.primary-btn{
+  background:white;
+  color:#4f46e5;
+  font-weight:bold;
+}
+
+.secondary-btn{
+  background:transparent;
+  border:1px solid white;
+  color:white;
+}
+
+.hero-right{
+  flex:1;
+  position:relative;
+  height:500px;
+}
+
+.floating-card{
+  position:absolute;
+  width:220px;
+  padding:20px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(15px);
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.floating-card span{
+  display:block;
+  margin-top:10px;
+  color:#ddd;
+}
+
+.card1{
+  top:20px;
+  left:50px;
+}
+
+.card2{
+  top:180px;
+  right:40px;
+}
+
+.card3{
+  bottom:30px;
+  left:20px;
+}
+
+.card4{
+  bottom:80px;
+  right:80px;
+}
+
+/* STATS */
+
+.stats-section{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  flex-wrap:wrap;
+  padding:40px;
+}
+
+.stat-card{
+  width:220px;
+  text-align:center;
+  padding:30px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(15px);
+}
+
+.stat-card h3{
+  font-size:42px;
+}
+
+/* HOW IT WORKS */
+
+.how-section{
+  padding:80px 60px;
+  text-align:center;
+}
+
+.how-section h2{
+  margin-bottom:50px;
+  font-size:40px;
+}
+
+.steps{
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  flex-wrap:wrap;
+}
+
+.step-card{
+  width:220px;
+  padding:30px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.12);
+}
+
+.step-card span{
+  font-size:40px;
+}
+
+/* RECENT */
+
+.recent-section{
+  padding:80px 60px;
+}
+
+.recent-section h2{
+  text-align:center;
+  margin-bottom:40px;
+  font-size:40px;
+}
+
+.recent-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+}
+
+.recent-card{
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(15px);
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+}
+
+.recent-image{
+  font-size:60px;
+  margin-bottom:20px;
+}
+
+/* FEATURES */
+
+.features-section{
+  padding:80px 60px;
+}
+
+.features-section h2{
+  text-align:center;
+  margin-bottom:40px;
+  font-size:40px;
+}
+
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
+}
+
+.feature-card{
+  padding:30px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.12);
+}
+
+/* FAQ */
+
+.faq-section{
+  padding:80px 60px;
+}
+
+.faq-section h2{
+  text-align:center;
+  margin-bottom:40px;
+  font-size:40px;
+}
+
+.faq-card{
+  background:rgba(255,255,255,0.12);
+  padding:25px;
+  border-radius:20px;
+  margin-bottom:20px;
+}
+
+.faq-card h3{
+  margin-bottom:10px;
+}
+
+/* CTA */
+
+.cta-section{
+  text-align:center;
+  padding:100px 30px;
+}
+
+.cta-section h2{
+  font-size:50px;
+  margin-bottom:15px;
+}
+
+.cta-section p{
+  margin-bottom:30px;
+}
+
+/* FOOTER */
+
+.footer{
+  text-align:center;
+  padding:40px;
+  background:rgba(0,0,0,0.2);
+}
+
+.footer h3{
+  margin-bottom:10px;
+}
+
+.footer p{
+  color:#ddd;
+  margin-bottom:8px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .hero{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .hero-left h1{
+    font-size:50px;
+  }
+
+  .hero-right{
+    width:100%;
+    height:400px;
+  }
+
+  .hero-buttons{
+    justify-content:center;
+  }
+
+  .navbar{
+    padding:20px;
+  }
+}
