@@ -178,6 +178,24 @@ function Dashboard() {
           </p>
         </div>
 
+        <div
+          className="action-card"
+          onClick={() => navigate('/admin')}
+        >
+          <div className="action-icon">
+            👑
+          </div>
+
+          <h2>
+            Admin Panel
+          </h2>
+
+          <p>
+            View platform statistics,
+            users, claims and activity.
+          </p>
+        </div>
+
       </section>
 
       <section className="activity-section">

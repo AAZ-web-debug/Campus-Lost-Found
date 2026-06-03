@@ -14,6 +14,7 @@ import LoserMode from './pages/LoserMode';
 import ClaimPage from './pages/ClaimPage';
 import ReviewClaims from './pages/ReviewClaims';
 import ReturnedItems from './pages/ReturnedItems';
+import AdminPage from './pages/AdminPage';
 
 function App() {
   return (
@@ -59,6 +60,11 @@ function App() {
         <Route
           path="/loser"
           element={<LoserMode />}
+        />
+
+        <Route
+          path="/admin"
+          element={<AdminPage />}
         />
 
         <Route

@@ -691,3 +691,269 @@ app.listen(
     );
   }
 );
+
+
+/* =========================
+    ADMIN ROUTES
+========================= */
+
+app.get(
+  '/api/admin/stats',
+  authenticateToken,
+  (req, res) => {
+
+    const user = db.prepare(`
+      SELECT *
+      FROM users
+      WHERE user_id = ?
+    `).get(req.user.userId);
+
+    if (
+      !user ||
+      user.role !== 'admin'
+    ) {
+      return res.status(403).json({
+        error: 'Access denied'
+      });
+    }
+
+    const totalUsers =
+      db.prepare(`
+        SELECT COUNT(*) as count
+        FROM users
+      `).get().count;
+
+    const totalItems =
+      db.prepare(`
+        SELECT COUNT(*) as count
+        FROM items
+      `).get().count;
+
+    const pendingClaims =
+      db.prepare(`
+        SELECT COUNT(*) as count
+        FROM claims
+        WHERE status='pending'
+      `).get().count;
+
+    const returnedItems =
+      db.prepare(`
+        SELECT COUNT(*) as count
+        FROM items
+        WHERE status='returned'
+      `).get().count;
+
+    res.json({
+      totalUsers,
+      totalItems,
+      pendingClaims,
+      returnedItems
+    });
+
+  }
+);
+
+/* =========================
+   ADMIN - ALL USERS
+========================= */
+
+app.get(
+  '/api/admin/users',
+  authenticateToken,
+  (req, res) => {
+
+    const user = db.prepare(`
+      SELECT *
+      FROM users
+      WHERE user_id = ?
+    `).get(req.user.userId);
+
+    if (
+      !user ||
+      user.role !== 'admin'
+    ) {
+      return res.status(403).json({
+        error: 'Access denied'
+      });
+    }
+
+    const users = db.prepare(`
+      SELECT
+        id,
+        user_id,
+        role,
+        created_at
+      FROM users
+      ORDER BY created_at DESC
+    `).all();
+
+    res.json(users);
+
+  }
+);
+
+/* =========================
+   ADMIN - ALL ITEMS
+========================= */
+
+app.get(
+  '/api/admin/items',
+  authenticateToken,
+  (req, res) => {
+
+    const user = db.prepare(`
+      SELECT *
+      FROM users
+      WHERE user_id = ?
+    `).get(req.user.userId);
+
+    if (
+      !user ||
+      user.role !== 'admin'
+    ) {
+      return res.status(403).json({
+        error: 'Access denied'
+      });
+    }
+
+    const items = db.prepare(`
+      SELECT *
+      FROM items
+      ORDER BY created_at DESC
+    `).all();
+
+    res.json(items);
+
+  }
+);
+
+/* =========================
+   ADMIN - ALL CLAIMS
+========================= */
+
+app.get(
+  '/api/admin/claims',
+  authenticateToken,
+  (req, res) => {
+
+    const user = db.prepare(`
+      SELECT *
+      FROM users
+      WHERE user_id = ?
+    `).get(req.user.userId);
+
+    if (
+      !user ||
+      user.role !== 'admin'
+    ) {
+      return res.status(403).json({
+        error: 'Access denied'
+      });
+    }
+
+    const claims = db.prepare(`
+      SELECT
+        claims.*,
+        items.title
+      FROM claims
+      JOIN items
+      ON claims.item_id = items.id
+      ORDER BY claims.created_at DESC
+    `).all();
+
+    res.json(claims);
+
+  }
+);
+
+
+/* =========================
+   ADMIN - DELETE USER
+========================= */
+
+app.delete(
+  '/api/admin/users/:id',
+  authenticateToken,
+  (req, res) => {
+
+    const admin = db.prepare(`
+      SELECT *
+      FROM users
+      WHERE user_id = ?
+    `).get(req.user.userId);
+
+    if (
+      !admin ||
+      admin.role !== 'admin'
+    ) {
+      return res.status(403).json({
+        error: 'Access denied'
+      });
+    }
+
+    const targetUser =
+      db.prepare(`
+        SELECT *
+        FROM users
+        WHERE id = ?
+      `).get(req.params.id);
+
+    if (
+      targetUser &&
+      targetUser.role === 'admin'
+    ) {
+      return res.status(400).json({
+        error:
+          'Cannot delete admin'
+      });
+    }
+
+    db.prepare(`
+      DELETE FROM users
+      WHERE id = ?
+    `).run(req.params.id);
+
+    res.json({
+      message:
+        'User deleted'
+    });
+
+  }
+);
+
+
+/* =========================
+   ADMIN - DELETE ITEM
+========================= */
+
+app.delete(
+  '/api/admin/items/:id',
+  authenticateToken,
+  (req, res) => {
+
+    const user = db.prepare(`
+      SELECT *
+      FROM users
+      WHERE user_id = ?
+    `).get(req.user.userId);
+
+    if (
+      !user ||
+      user.role !== 'admin'
+    ) {
+      return res.status(403).json({
+        error: 'Access denied'
+      });
+    }
+
+    db.prepare(`
+      DELETE FROM items
+      WHERE id = ?
+    `).run(req.params.id);
+
+    res.json({
+      message: 'Item deleted'
+    });
+
+  }
+);
