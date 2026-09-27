@@ -95,6 +95,25 @@ CREATE TABLE IF NOT EXISTS claims (
 )
 `).run();
 
+
+/* CLAIM CONTACTS */
+
+db.prepare(`
+CREATE TABLE IF NOT EXISTS claim_contacts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+  claim_id INTEGER NOT NULL UNIQUE,
+
+  email TEXT,
+  phone TEXT,
+
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY(claim_id)
+  REFERENCES claims(id)
+)
+`).run();
+
 /* =========================
    MULTER
 ========================= */
@@ -587,6 +606,42 @@ app.get(
 );
 
 /* =========================
+   MY CLAIM CONTACT
+========================= */
+
+app.get(
+  '/api/my-claims/:id/contact',
+  authenticateToken,
+  (req, res) => {
+
+    const contact = db.prepare(`
+      SELECT
+        claim_contacts.email,
+        claim_contacts.phone,
+        claim_contacts.created_at
+      FROM claim_contacts
+      JOIN claims
+      ON claim_contacts.claim_id = claims.id
+      WHERE claim_contacts.claim_id = ?
+        AND claims.claimer_id = ?
+        AND claims.status = 'approved'
+    `).get(
+      req.params.id,
+      req.user.userId
+    );
+
+    if (!contact) {
+      return res.status(404).json({
+        error:
+          'Contact details are not available'
+      });
+    }
+
+    res.json(contact);
+  }
+);
+
+/* =========================
    APPROVE CLAIM
 ========================= */
 
@@ -594,6 +649,22 @@ app.post(
   '/api/claims/:id/approve',
   authenticateToken,
   (req, res) => {
+
+    const {
+      email,
+      phone
+    } = req.body;
+
+    // At least one contact method is required
+    if (
+      (!email || !email.trim()) &&
+      (!phone || !phone.trim())
+    ) {
+      return res.status(400).json({
+        error:
+          'Please provide an email or phone number'
+      });
+    }
 
     const claim =
       db.prepare(`
@@ -605,6 +676,13 @@ app.post(
     if (!claim) {
       return res.status(404).json({
         error: 'Claim not found'
+      });
+    }
+
+    if (claim.status !== 'pending') {
+      return res.status(400).json({
+        error:
+          'Only pending claims can be approved'
       });
     }
 
@@ -621,6 +699,7 @@ app.post(
       });
     }
 
+    // Only the finder can approve
     if (
       item.finder_id !==
       req.user.userId
@@ -631,44 +710,67 @@ app.post(
       });
     }
 
-    const approveClaim = db.transaction(() => {
+    // Item must still be available
+    if (item.status !== 'found') {
+      return res.status(400).json({
+        error:
+          'This item is no longer available'
+      });
+    }
 
-  // Approve the selected claim
-  db.prepare(`
-    UPDATE claims
-    SET status='approved'
-    WHERE id=?
-  `).run(req.params.id);
+    const approveClaim =
+      db.transaction(() => {
 
-  // Reject all other pending claims for this item
-  db.prepare(`
-    UPDATE claims
-    SET status='rejected'
-    WHERE item_id=?
-      AND id<>?
-      AND status='pending'
-  `).run(
-    claim.item_id,
-    req.params.id
-  );
+        // Approve selected claim
+        db.prepare(`
+          UPDATE claims
+          SET status='approved'
+          WHERE id=?
+        `).run(req.params.id);
 
-  // Mark the item as returned
-  db.prepare(`
-    UPDATE items
-    SET status='returned',
-        updated_at=CURRENT_TIMESTAMP
-    WHERE id=?
-  `).run(claim.item_id);
+        // Reject every other pending claim
+        db.prepare(`
+          UPDATE claims
+          SET status='rejected'
+          WHERE item_id=?
+            AND id<>?
+            AND status='pending'
+        `).run(
+          claim.item_id,
+          req.params.id
+        );
 
-});
+        // Store contact details
+        db.prepare(`
+          INSERT INTO claim_contacts (
+            claim_id,
+            email,
+            phone
+          )
+          VALUES (?, ?, ?)
+        `).run(
+          req.params.id,
+          email?.trim() || null,
+          phone?.trim() || null
+        );
 
-approveClaim();
+        // Mark item as returned
+        db.prepare(`
+          UPDATE items
+          SET status='returned',
+              updated_at=CURRENT_TIMESTAMP
+          WHERE id=?
+        `).run(
+          claim.item_id
+        );
+      });
 
-res.json({
-  message:
-    'Claim approved'
-});
+    approveClaim();
 
+    res.json({
+      message:
+        'Claim approved and contact details shared'
+    });
   }
 );
 

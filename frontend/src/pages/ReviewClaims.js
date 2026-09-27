@@ -8,6 +8,7 @@ import "./reviewclaims.css";
 import { useToast } from "../components/Toast";
 import ConfirmModal from "../components/ConfirmModal";
 import BackButton from "../components/BackButton";
+import ApproveClaimModal from "../components/ApproveClaimModal";
 
 
 function ReviewClaims() {
@@ -17,6 +18,12 @@ function ReviewClaims() {
 
   const [confirmAction, setConfirmAction] =
     useState(null);
+
+  const [approveClaimId, setApproveClaimId] =
+    useState(null);
+
+  const [approving, setApproving] =
+    useState(false);
 
   const {
     success,
@@ -74,9 +81,14 @@ function ReviewClaims() {
   };
 
 
-  const approveClaim = async (id) => {
+  const approveClaim = async (
+    id,
+    contactDetails
+  ) => {
 
     try {
+
+      setApproving(true);
 
       const token =
         localStorage.getItem("token");
@@ -87,9 +99,15 @@ function ReviewClaims() {
           method: "POST",
 
           headers: {
+            "Content-Type": "application/json",
+
             Authorization:
               `Bearer ${token}`
-          }
+          },
+
+          body: JSON.stringify(
+            contactDetails
+          )
         }
       );
 
@@ -103,8 +121,10 @@ function ReviewClaims() {
         );
       }
 
+      setApproveClaimId(null);
+
       success(
-        "The claim has been approved and the item has been marked as returned."
+        "Claim approved and contact details shared with the claimant."
       );
 
       fetchClaims();
@@ -115,6 +135,10 @@ function ReviewClaims() {
         err.message ||
         "Failed to approve claim"
       );
+
+    } finally {
+
+      setApproving(false);
 
     }
 
@@ -170,10 +194,7 @@ function ReviewClaims() {
 
   const handleApprove = (id) => {
 
-    setConfirmAction({
-      type: "approve",
-      id
-    });
+    setApproveClaimId(id);
 
   };
 
@@ -201,11 +222,7 @@ function ReviewClaims() {
 
     setConfirmAction(null);
 
-    if (type === "approve") {
-
-      await approveClaim(id);
-
-    } else {
+    if (type === "reject") {
 
       await rejectClaim(id);
 
@@ -359,26 +376,36 @@ function ReviewClaims() {
       </div>
 
 
+      {/* APPROVE CLAIM MODAL */}
+
+      <ApproveClaimModal
+        open={approveClaimId !== null}
+
+        loading={approving}
+
+        onConfirm={(contactDetails) =>
+          approveClaim(
+            approveClaimId,
+            contactDetails
+          )
+        }
+
+        onCancel={() =>
+          setApproveClaimId(null)
+        }
+      />
+
+
+      {/* REJECT CONFIRMATION MODAL */}
+
       <ConfirmModal
         open={!!confirmAction}
 
-        title={
-          confirmAction?.type === "approve"
-            ? "Approve Claim?"
-            : "Reject Claim?"
-        }
+        title="Reject Claim?"
 
-        message={
-          confirmAction?.type === "approve"
-            ? "Are you sure you want to approve this ownership claim? The item will be marked as returned."
-            : "Are you sure you want to reject this ownership claim?"
-        }
+        message="Are you sure you want to reject this ownership claim?"
 
-        confirmText={
-          confirmAction?.type === "approve"
-            ? "Approve Claim"
-            : "Reject Claim"
-        }
+        confirmText="Reject Claim"
 
         cancelText="Cancel"
 
@@ -394,5 +421,6 @@ function ReviewClaims() {
     </div>
   );
 }
+
 
 export default ReviewClaims;

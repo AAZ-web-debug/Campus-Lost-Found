@@ -319,3 +319,72 @@
   }
 
 }
+
+.claim-contact-section {
+  margin-top: 20px;
+}
+
+.contact-finder-btn {
+  border: none;
+  padding: 11px 16px;
+  border-radius: 10px;
+  background: #4f46e5;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.contact-finder-btn:hover {
+  transform: translateY(-1px);
+  background: #4338ca;
+}
+
+.contact-finder-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.claim-contact-card {
+  margin-top: 15px;
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  color: #111827;
+}
+
+.contact-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.contact-icon {
+  font-size: 24px;
+}
+
+.contact-header h3 {
+  margin: 0 0 4px;
+  font-size: 17px;
+}
+
+.contact-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.contact-detail {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.contact-detail + .contact-detail {
+  border-top: 1px solid #e5e7eb;
+}
