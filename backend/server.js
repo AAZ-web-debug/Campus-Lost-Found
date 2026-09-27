@@ -241,8 +241,9 @@ app.post(
     );
 
     res.json({
-      token
-    });
+  token,
+  role: user.role
+});
   }
 );
 
@@ -450,6 +451,50 @@ app.post(
       additional_proof
     } = req.body;
 
+    // Check that the item exists
+    const item = db.prepare(`
+      SELECT *
+      FROM items
+      WHERE id = ?
+    `).get(item_id);
+
+    if (!item) {
+      return res.status(404).json({
+        error: 'Item not found'
+      });
+    }
+
+    // Item must still be available
+    if (item.status !== 'found') {
+      return res.status(400).json({
+        error: 'This item is no longer available for claims'
+      });
+    }
+
+    // Finder cannot claim their own item
+    if (item.finder_id === req.user.userId) {
+      return res.status(400).json({
+        error: 'You cannot claim an item you reported'
+      });
+    }
+
+    // Prevent duplicate claims from the same user
+    const existingClaim = db.prepare(`
+      SELECT id
+      FROM claims
+      WHERE item_id = ?
+        AND claimer_id = ?
+    `).get(
+      item_id,
+      req.user.userId
+    );
+
+    if (existingClaim) {
+      return res.status(400).json({
+        error: 'You have already submitted a claim for this item'
+      });
+    }
+
     db.prepare(`
       INSERT INTO claims (
         item_id,
@@ -474,8 +519,7 @@ app.post(
     );
 
     res.json({
-      message:
-        'Claim submitted'
+      message: 'Claim submitted'
     });
   }
 );
@@ -507,6 +551,38 @@ app.get(
 
     res.json(claims);
 
+  }
+);
+
+/* =========================
+   MY CLAIMS
+========================= */
+
+app.get(
+  '/api/my-claims',
+  authenticateToken,
+  (req, res) => {
+
+    const claims = db.prepare(`
+      SELECT
+        claims.id,
+        claims.item_id,
+        claims.status,
+        claims.created_at,
+        items.title,
+        items.category,
+        items.location,
+        items.status AS item_status
+      FROM claims
+      JOIN items
+      ON claims.item_id = items.id
+      WHERE claims.claimer_id = ?
+      ORDER BY claims.created_at DESC
+    `).all(
+      req.user.userId
+    );
+
+    res.json(claims);
   }
 );
 
@@ -555,22 +631,43 @@ app.post(
       });
     }
 
-    db.prepare(`
-      UPDATE claims
-      SET status='approved'
-      WHERE id=?
-    `).run(req.params.id);
+    const approveClaim = db.transaction(() => {
 
-    db.prepare(`
-      UPDATE items
-      SET status='returned'
-      WHERE id=?
-    `).run(claim.item_id);
+  // Approve the selected claim
+  db.prepare(`
+    UPDATE claims
+    SET status='approved'
+    WHERE id=?
+  `).run(req.params.id);
 
-    res.json({
-      message:
-        'Claim approved'
-    });
+  // Reject all other pending claims for this item
+  db.prepare(`
+    UPDATE claims
+    SET status='rejected'
+    WHERE item_id=?
+      AND id<>?
+      AND status='pending'
+  `).run(
+    claim.item_id,
+    req.params.id
+  );
+
+  // Mark the item as returned
+  db.prepare(`
+    UPDATE items
+    SET status='returned',
+        updated_at=CURRENT_TIMESTAMP
+    WHERE id=?
+  `).run(claim.item_id);
+
+});
+
+approveClaim();
+
+res.json({
+  message:
+    'Claim approved'
+});
 
   }
 );

@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./claim.css";
+import { useToast } from "../components/Toast";
+import BackButton from "../components/BackButton";
 
 function ClaimPage() {
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const {
+  success,
+  error
+} = useToast();
 
   const [claimReason, setClaimReason] =
     useState("");
@@ -75,15 +81,15 @@ function ClaimPage() {
         );
       }
 
-      alert(
-        "Claim submitted successfully"
-      );
+      success(
+  "Your ownership claim has been submitted for review."
+);
 
       navigate("/loser");
 
     } catch (err) {
 
-      alert(err.message);
+      error(err.message);
 
     } finally {
 
@@ -94,6 +100,8 @@ function ClaimPage() {
 
   return (
     <div className="claim-container">
+
+      <BackButton fallback="/loser" />
 
       <div className="claim-card">
 

@@ -16,63 +16,80 @@ import ReviewClaims from './pages/ReviewClaims';
 import ReturnedItems from './pages/ReturnedItems';
 import AdminPage from './pages/AdminPage';
 
+import AdminRoute from './components/AdminRoute';
+import { ToastProvider } from './components/Toast';
+import MyClaims from "./pages/MyClaims";
+
 function App() {
   return (
     <Router>
 
-      <Routes>
+      <ToastProvider>
 
-        <Route
-          path="/"
-          element={<LandingPage />}
-        />
+        <Routes>
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+          <Route
+            path="/"
+            element={<LandingPage />}
+          />
 
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
 
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
+          <Route
+            path="/register"
+            element={<Register />}
+          />
 
-        <Route
-          path="/finder"
-          element={<FinderMode />}
-        />
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+          />
 
-        <Route
-          path="/returned-items"
-          element={<ReturnedItems />}
-        />
+          <Route
+            path="/finder"
+            element={<FinderMode />}
+          />
 
-        <Route
-          path="/review-claims"
-          element={<ReviewClaims />}
-        />
+          <Route
+            path="/returned-items"
+            element={<ReturnedItems />}
+          />
 
-        <Route
-          path="/loser"
-          element={<LoserMode />}
-        />
+          <Route
+            path="/review-claims"
+            element={<ReviewClaims />}
+          />
 
-        <Route
-          path="/admin"
-          element={<AdminPage />}
-        />
+          <Route
+            path="/loser"
+            element={<LoserMode />}
+          />
 
-        <Route
-          path="/claim/:id"
-          element={<ClaimPage />}
-        />
+          <Route
+  path="/my-claims"
+  element={<MyClaims />}
+/>
 
-      </Routes>
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminPage />
+              </AdminRoute>
+            }
+          />
+
+          <Route
+            path="/claim/:id"
+            element={<ClaimPage />}
+          />
+
+        </Routes>
+
+      </ToastProvider>
 
     </Router>
   );

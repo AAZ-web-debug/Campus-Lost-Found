@@ -12,6 +12,14 @@
   );
 
   color:white;
+
+  position:relative;
+}
+
+.returned-page > .back-button{
+  position:absolute;
+  top:30px;
+  left:40px;
 }
 
 .returned-page h1{

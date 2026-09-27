@@ -12,6 +12,14 @@
   padding:40px;
 
   color:white;
+
+  position:relative;
+}
+
+.review-container > .back-button{
+  position:absolute;
+  top:30px;
+  left:40px;
 }
 
 .review-container h1{

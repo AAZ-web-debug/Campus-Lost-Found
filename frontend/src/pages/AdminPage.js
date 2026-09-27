@@ -4,6 +4,15 @@ import React, {
 } from "react";
 
 import "./admin.css";
+import BackButton from "../components/BackButton";
+
+const formatStatus = (value) => {
+  if (!value) return "";
+
+  return value
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
 
 function AdminPage() {
 
@@ -192,6 +201,8 @@ function AdminPage() {
     return (
       <div className="admin-page">
 
+        <BackButton fallback="/dashboard" />
+
         <h1>
           ⛔ Access Denied
         </h1>
@@ -212,6 +223,8 @@ function AdminPage() {
 
   return (
     <div className="admin-page">
+
+      <BackButton fallback="/dashboard" />
 
       <h1>
         👑 Admin Panel
@@ -265,7 +278,7 @@ function AdminPage() {
                   : "user-badge"
               }
             >
-              {user.role}
+              {formatStatus(user.role)}
             </span>
 
             {user.role !== "admin" && (
@@ -305,7 +318,7 @@ function AdminPage() {
             </span>
 
             <span>
-              {item.status}
+              {formatStatus(item.status)}
             </span>
 
             <button
@@ -345,7 +358,7 @@ function AdminPage() {
             </span>
 
             <span>
-              {claim.status}
+              {formatStatus(claim.status)}
             </span>
 
           </div>

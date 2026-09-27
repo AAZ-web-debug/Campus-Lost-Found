@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./finder.css";
+import { useToast } from "../components/Toast";
+import BackButton from "../components/BackButton";
 
 function FinderMode() {
   const [title, setTitle] = useState("");
@@ -9,6 +11,11 @@ function FinderMode() {
   const [location, setLocation] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const {
+  success,
+  error,
+  warning
+} = useToast();
 
   const handleUpload = async () => {
     const token = localStorage.getItem("token");
@@ -21,7 +28,9 @@ function FinderMode() {
       !location ||
       !image
     ) {
-      alert("Please fill all fields");
+      warning(
+  "Please complete every field before uploading."
+);
       return;
     }
 
@@ -59,7 +68,9 @@ function FinderMode() {
         );
       }
 
-      alert("Item uploaded successfully");
+      success(
+  "Your found item has been added to the platform."
+);
 
       setTitle("");
       setCategory("");
@@ -69,7 +80,7 @@ function FinderMode() {
       setImage(null);
 
     } catch (err) {
-      alert(err.message);
+      error(err.message);
     } finally {
       setLoading(false);
     }
@@ -78,12 +89,14 @@ function FinderMode() {
   return (
     <div className="finder-container">
 
-      <div className="finder-header">
-        <h1>🔍 Report Found Item</h1>
-        <p>
-          Help someone get their belongings back.
-        </p>
-      </div>
+  <BackButton fallback="/dashboard" />
+
+  <div className="finder-header">
+    <h1>🔍 Report Found Item</h1>
+    <p>
+      Help someone get their belongings back.
+    </p>
+  </div>
 
       <div className="finder-card">
 

@@ -10,6 +10,14 @@
   padding:50px;
 
   color:white;
+
+  position:relative;
+}
+
+.loser-container > .back-button{
+  position:absolute;
+  top:30px;
+  left:40px;
 }
 
 .loser-header{

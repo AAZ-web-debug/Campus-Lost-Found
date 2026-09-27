@@ -1,4 +1,5 @@
 .claim-container{
+
   min-height:100vh;
 
   background:linear-gradient(
@@ -8,10 +9,20 @@
   );
 
   display:flex;
+
   justify-content:center;
+
   align-items:center;
 
   padding:30px;
+
+  position:relative;
+}
+
+.claim-container > .back-button{
+  position:absolute;
+  top:30px;
+  left:40px;
 }
 
 .claim-card{

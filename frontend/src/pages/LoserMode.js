@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./loser.css";
+import BackButton from "../components/BackButton";
 
 function LoserMode() {
   const [items, setItems] = useState([]);
@@ -50,6 +51,8 @@ function LoserMode() {
 
   return (
     <div className="loser-container">
+
+       <BackButton fallback="/dashboard" />
 
       <div className="loser-header">
         <h1>📦 Browse Found Items</h1>

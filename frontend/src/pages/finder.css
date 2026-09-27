@@ -16,6 +16,12 @@
   color:white;
 }
 
+.finder-container > .back-button {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+}
+
 .finder-header{
   text-align:center;
   margin-bottom:30px;

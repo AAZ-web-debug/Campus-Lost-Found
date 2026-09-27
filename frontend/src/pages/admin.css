@@ -12,6 +12,18 @@
   );
 
   color:white;
+
+  position:relative;
+}
+
+.admin-page > .back-button{
+  position:absolute;
+  top:30px;
+  left:40px;
+}
+
+.admin-page > h1 {
+  margin-top: 45px;
 }
 
 .admin-grid{

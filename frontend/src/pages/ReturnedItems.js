@@ -4,6 +4,7 @@ import React, {
 } from "react";
 
 import "./returneditems.css";
+import BackButton from "../components/BackButton";
 
 function ReturnedItems() {
 
@@ -24,6 +25,8 @@ function ReturnedItems() {
 
   return (
     <div className="returned-page">
+
+      <BackButton fallback="/dashboard" />
 
       <h1>
         ✅ Recovered Items

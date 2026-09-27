@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isAuthenticated, logout, getUserId } from '../services/auth';
+import { isAuthenticated, logout, getUserId, isAdmin } from '../services/auth';
 import './dashboard.css';
 
 function Dashboard() {
@@ -179,22 +179,41 @@ function Dashboard() {
         </div>
 
         <div
-          className="action-card"
-          onClick={() => navigate('/admin')}
-        >
-          <div className="action-icon">
-            👑
-          </div>
+  className="action-card"
+  onClick={() => navigate("/my-claims")}
+>
+  <div className="action-icon">
+    📋
+  </div>
 
-          <h2>
-            Admin Panel
-          </h2>
+  <div>
+    <h2>My Claims</h2>
 
-          <p>
-            View platform statistics,
-            users, claims and activity.
-          </p>
-        </div>
+    <p>
+      Track the status of claims you have submitted
+    </p>
+  </div>
+</div>
+
+        {isAdmin() && (
+  <div
+    className="action-card admin-action-card"
+    onClick={() => navigate('/admin')}
+  >
+    <div className="action-icon">
+      👑
+    </div>
+
+    <h2>
+      Admin Panel
+    </h2>
+
+    <p>
+      View platform statistics,
+      users, claims and activity.
+    </p>
+  </div>
+)}
 
       </section>
 
