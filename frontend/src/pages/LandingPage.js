@@ -31,10 +31,18 @@ function LandingPage() {
   const fetchRecentItems = async () => {
   try {
     const res = await fetch(
-  "http://localhost:5000/api/public-items?limit=4"
-);
+      "http://localhost:5000/api/public-items?limit=4"
+    );
 
     const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Failed to load recent items");
+    }
+
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid recent items response from server");
+    }
 
     const recent = data
       .sort(
@@ -45,9 +53,9 @@ function LandingPage() {
       .slice(0, 4);
 
     setRecentItems(recent);
-
   } catch (err) {
-    console.error(err);
+    console.error("Failed to fetch recent items:", err);
+    setRecentItems([]);
   }
 };
 
@@ -82,8 +90,8 @@ function LandingPage() {
       <nav className="navbar">
 
         <div className="logo">
-          🛡️ Campus Lost & Found
-        </div>
+  🛡️ Campus Lost & Found
+</div>
 
         <div className="nav-links">
 
@@ -294,7 +302,7 @@ function LandingPage() {
                   className="recent-item-image"
                 />
 
-                <h3>Found Item</h3>
+                <h3>{item.title || "Found Item"}</h3>
 
                 <p>
                   📍 {item.location}

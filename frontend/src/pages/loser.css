@@ -1,239 +1,783 @@
-.loser-container{
-  min-height:100vh;
+/* =========================================================
+   CAMPUS LOST & FOUND — BROWSE ITEMS
+   ========================================================= */
 
-  background:linear-gradient(
-    135deg,
-    #4f46e5,
-    #9333ea
-  );
-
-  padding:50px;
-
-  color:white;
-
-  position:relative;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.loser-container > .back-button{
-  position:absolute;
-  top:30px;
-  left:40px;
+body {
+  font-family:
+    "Segoe UI",
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  background: #080812;
 }
 
-.loser-header{
-  text-align:center;
-  margin-bottom:30px;
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.loser-container {
+  min-height: 100vh;
+
+  position: relative;
+
+  padding: 55px 5% 90px;
+
+  background:
+    radial-gradient(
+      circle at 10% 5%,
+      rgba(99, 102, 241, 0.15),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 35%,
+      rgba(168, 85, 247, 0.1),
+      transparent 28%
+    ),
+    #080812;
+
+  color: #ffffff;
+
+  overflow-x: hidden;
 }
 
-.loser-header h1{
-  font-size:48px;
-  margin-bottom:10px;
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.loser-container > .back-button {
+  position: absolute;
+
+  top: 28px;
+  left: 5%;
+
+  z-index: 10;
 }
 
-.loser-header p{
-  color:#e5e7eb;
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.loser-header {
+  max-width: 850px;
+
+  margin: 55px auto 45px;
+
+  text-align: center;
 }
 
-.filters{
-  display:flex;
-  gap:15px;
-  justify-content:center;
-  flex-wrap:wrap;
+.loser-header h1 {
+  margin-bottom: 14px;
 
-  margin-bottom:40px;
+  font-size:
+    clamp(38px, 5vw, 58px);
+
+  line-height: 1;
+
+  letter-spacing: -2.5px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff,
+      #c7c8ff 60%,
+      #a78bfa
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  background-clip: text;
+}
+
+.loser-header p {
+  color: #858596;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+}
+
+/* =========================================================
+   FILTER BAR
+   ========================================================= */
+
+.filters {
+  max-width: 900px;
+
+  margin: 0 auto 45px;
+
+  padding: 9px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 15px;
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.18);
 }
 
 .filters input,
-.filters select{
+.filters select {
+  height: 46px;
 
-  width:280px;
+  border:
+    1px solid rgba(255, 255, 255, 0.07);
 
-  padding:14px;
+  outline: none;
 
-  border:none;
-
-  border-radius:12px;
-
-  outline:none;
-}
-
-.items-grid{
-
-  display:grid;
-
-  grid-template-columns:
-  repeat(
-    auto-fit,
-    minmax(320px,1fr)
-  );
-
-  gap:25px;
-}
-
-.item-card{
+  border-radius: 10px;
 
   background:
-  rgba(255,255,255,0.12);
+    rgba(0, 0, 0, 0.2);
 
-  backdrop-filter:
-  blur(20px);
+  color: #ffffff;
 
-  border-radius:22px;
+  font-family: inherit;
 
-  overflow:hidden;
+  font-size: 13px;
 
-  transition:.3s;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.item-card:hover{
+.filters input {
+  flex: 1;
 
-  transform:
-  translateY(-6px);
+  min-width: 0;
 
+  padding: 0 15px;
 }
 
-.item-image{
+.filters select {
+  width: 190px;
 
-  width:100%;
-  height:240px;
+  padding: 0 13px;
 
-  object-fit:cover;
+  cursor: pointer;
 }
 
-.item-category{
+.filters input::placeholder {
+  color: #656578;
+}
 
-  margin:15px;
+.filters input:hover,
+.filters select:hover {
+  border-color:
+    rgba(255, 255, 255, 0.12);
+}
 
-  display:inline-block;
-
-  padding:6px 12px;
-
-  border-radius:999px;
+.filters input:focus,
+.filters select:focus {
+  border-color:
+    rgba(129, 140, 248, 0.5);
 
   background:
-  rgba(255,255,255,0.15);
-
-  font-size:13px;
-}
-
-.item-card h2{
-  padding:0 15px;
-  margin-bottom:10px;
-}
-
-.description{
-
-  padding:0 15px;
-
-  color:#e5e7eb;
-
-  min-height:50px;
-}
-
-.location{
-
-  padding:15px;
-
-  font-weight:600;
-}
-
-.empty-state{
-
-  text-align:center;
-
-  width:100%;
-
-  padding:50px;
-
-  background:
-  rgba(255,255,255,0.1);
-
-  border-radius:20px;
-}
-
-@media(max-width:768px){
-
-  .loser-container{
-    padding:20px;
-  }
-
-  .loser-header h1{
-    font-size:36px;
-  }
-
-}
-.claim-btn{
-  width:calc(100% - 30px);
-
-  margin:0 15px 15px;
-
-  padding:12px;
-
-  border:none;
-
-  border-radius:12px;
-
-  background:#10b981;
-
-  color:white;
-
-  font-weight:700;
-
-  cursor:pointer;
-}
-
-.claim-btn:hover{
-  background:#059669;
-}
-.image-modal{
-
-  position:fixed;
-
-  top:0;
-  left:0;
-
-  width:100%;
-  height:100%;
-
-  background:
-  rgba(0,0,0,.85);
-
-  display:flex;
-
-  justify-content:center;
-  align-items:center;
-
-  z-index:9999;
-
-  cursor:pointer;
-}
-
-.modal-image{
-
-  max-width:90%;
-  max-height:90%;
-
-  border-radius:20px;
+    rgba(0, 0, 0, 0.28);
 
   box-shadow:
-  0 0 40px
-  rgba(255,255,255,.2);
+    0 0 0 3px rgba(99, 102, 241, 0.08);
 }
 
-.item-image,
-.returned-card img{
+.filters select option {
+  background: #151521;
 
-  cursor:pointer;
+  color: #ffffff;
 }
-.empty-state{
 
-  text-align:center;
+/* =========================================================
+   ITEMS GRID
+   ========================================================= */
 
-  font-size:20px;
+.items-grid {
+  width: 100%;
 
-  color:white;
+  max-width: 1350px;
 
-  margin-top:40px;
+  margin: 0 auto;
 
-  width:100%;
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+/* =========================================================
+   ITEM CARD
+   ========================================================= */
+
+.item-card {
+  position: relative;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.018)
+    );
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.15);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.item-card:hover {
+  transform: translateY(-7px);
+
+  border-color:
+    rgba(129, 140, 248, 0.27);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(99, 102, 241, 0.08),
+      rgba(255, 255, 255, 0.025)
+    );
+
+  box-shadow:
+    0 25px 55px rgba(0, 0, 0, 0.27);
+}
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.item-image {
+  display: block;
+
+  width: 100%;
+
+  height: 235px;
+
+  object-fit: cover;
+
+  background: #151521;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.4s ease,
+    filter 0.4s ease;
+}
+
+.item-card:hover .item-image {
+  transform: scale(1.025);
+
+  filter: brightness(1.05);
+}
+
+/* =========================================================
+   CARD CONTENT
+   ========================================================= */
+
+.item-category {
+  align-self: flex-start;
+
+  margin:
+    17px 18px 10px;
+
+  padding:
+    6px 10px;
+
+  border:
+    1px solid rgba(129, 140, 248, 0.12);
+
+  border-radius: 999px;
+
+  background:
+    rgba(99, 102, 241, 0.09);
+
+  color: #a5b4fc;
+
+  font-size: 11px;
+
+  font-weight: 650;
+
+  letter-spacing: 0.2px;
+}
+
+.item-card h2 {
+  padding: 0 18px;
+
+  margin-bottom: 9px;
+
+  color: #f2f2f7;
+
+  font-size: 19px;
+
+  line-height: 1.3;
+
+  letter-spacing: -0.3px;
+
+  overflow-wrap: anywhere;
+}
+
+.description {
+  padding: 0 18px;
+
+  min-height: 45px;
+
+  color: #818192;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 2;
+
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+.location {
+  margin-top: 15px;
+
+  padding: 0 18px;
+
+  color: #9999aa;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   CLAIM BUTTON
+   ========================================================= */
+
+.claim-btn {
+  width: calc(100% - 36px);
+
+  min-height: 45px;
+
+  margin:
+    20px 18px 18px;
+
+  border:
+    1px solid rgba(129, 140, 248, 0.15);
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #8b5cf6
+    );
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 22px rgba(99, 102, 241, 0.18);
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.claim-btn:hover {
+  transform: translateY(-2px);
+
+  filter: brightness(1.08);
+
+  box-shadow:
+    0 12px 28px rgba(99, 102, 241, 0.28);
+}
+
+.claim-btn:active {
+  transform: translateY(0);
+}
+
+.claim-btn:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.15),
+    0 8px 22px rgba(99, 102, 241, 0.18);
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+  grid-column: 1 / -1;
+
+  padding:
+    75px 30px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 18px;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  color: #777789;
+
+  font-size: 15px;
+
+  text-align: center;
+}
+
+/* =========================================================
+   IMAGE MODAL
+   ========================================================= */
+
+.image-modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background:
+    rgba(3, 3, 10, 0.88);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  cursor: pointer;
+
+  animation:
+    modal-fade 0.2s ease-out;
+}
+
+.modal-image {
+  max-width:
+    min(1100px, 92vw);
+
+  max-height: 88vh;
+
+  object-fit: contain;
+
+  border-radius: 15px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.1);
+
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.6);
+
+  animation:
+    modal-image-in 0.25s ease-out;
+}
+
+/* =========================================================
+   MODAL ANIMATIONS
+   ========================================================= */
+
+@keyframes modal-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-image-in {
+  from {
+    opacity: 0;
+
+    transform:
+      scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      scale(1);
+  }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .items-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   SMALL TABLET
+   ========================================================= */
+
+@media (max-width: 800px) {
+  .loser-container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .loser-container > .back-button {
+    left: 24px;
+  }
+
+  .items-grid {
+    gap: 16px;
+  }
+
+  .item-image {
+    height: 220px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .loser-container {
+    padding:
+      25px 20px 70px;
+  }
+
+  .loser-container > .back-button {
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    margin-bottom: 25px;
+  }
+
+  .loser-header {
+    margin:
+      25px auto 35px;
+  }
+
+  .loser-header h1 {
+    font-size: 38px;
+
+    line-height: 1.05;
+
+    letter-spacing: -1.5px;
+  }
+
+  .loser-header p {
+    font-size: 14px;
+  }
+
+  .filters {
+    flex-direction: column;
+
+    padding: 10px;
+
+    margin-bottom: 30px;
+
+    gap: 8px;
+  }
+
+  .filters input,
+  .filters select {
+    width: 100%;
+
+    min-height: 46px;
+  }
+
+  .items-grid {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+  .item-card {
+    border-radius: 16px;
+  }
+
+  .item-image {
+    height: 245px;
+  }
+
+  .item-category {
+    margin-top: 15px;
+  }
+
+  .item-card h2 {
+    font-size: 18px;
+  }
+
+  .empty-state {
+    padding:
+      60px 20px;
+  }
+
+  .image-modal {
+    padding: 20px;
+  }
+
+  .modal-image {
+    max-width: 94vw;
+    max-height: 84vh;
+
+    border-radius: 12px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 450px) {
+  .loser-container {
+    padding:
+      20px 16px 60px;
+  }
+
+  .loser-header {
+    margin:
+      20px auto 30px;
+  }
+
+  .loser-header h1 {
+    font-size: 32px;
+
+    letter-spacing: -1.3px;
+  }
+
+  .loser-header p {
+    font-size: 13px;
+  }
+
+  .filters {
+    border-radius: 13px;
+  }
+
+  .item-image {
+    height: 220px;
+  }
+
+  .item-category {
+    margin:
+      14px 15px 9px;
+  }
+
+  .item-card h2,
+  .description,
+  .location {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .claim-btn {
+    width: calc(100% - 30px);
+
+    margin:
+      18px 15px 15px;
+  }
+
+  .modal-image {
+    max-width: 96vw;
+
+    max-height: 82vh;
+  }
+}
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) {
+  .item-card:hover {
+    transform: none;
+  }
+
+  .item-card:hover .item-image {
+    transform: none;
+
+    filter: none;
+  }
+
+  .claim-btn:hover {
+    transform: none;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .item-card,
+  .item-image,
+  .claim-btn {
+    transition: none;
+  }
+
+  .image-modal,
+  .modal-image {
+    animation: none;
+  }
 }

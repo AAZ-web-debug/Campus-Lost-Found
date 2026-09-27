@@ -5,6 +5,7 @@ import React, {
 
 import "./admin.css";
 import BackButton from "../components/BackButton";
+import ConfirmModal from "../components/ConfirmModal";
 
 const formatStatus = (value) => {
   if (!value) return "";
@@ -30,6 +31,8 @@ function AdminPage() {
 
   const [accessDenied, setAccessDenied] =
     useState(false);
+
+    const [confirmAction, setConfirmAction] = useState(null);
 
   const token =
     localStorage.getItem(
@@ -144,20 +147,44 @@ function AdminPage() {
 
   };
 
-  const deleteItem = async (id) => {
+  const deleteItem = (id) => {
+  setConfirmAction({
+    type: "item",
+    id
+  });
+};
 
-    if (
-      !window.confirm(
-        "Delete this item?"
-      )
-    ) {
-      return;
-    }
+  const deleteUser = (id) => {
+  setConfirmAction({
+    type: "user",
+    id
+  });
+};
 
-    await fetch(
-      `http://localhost:5000/api/admin/items/${id}`,
+const handleConfirmDelete = async () => {
+  if (!confirmAction) {
+    return;
+  }
+
+  const {
+    type,
+    id
+  } = confirmAction;
+
+  setConfirmAction(null);
+
+  const endpoint =
+    type === "user"
+      ? `/api/admin/users/${id}`
+      : `/api/admin/items/${id}`;
+
+  try {
+
+    const res = await fetch(
+      `http://localhost:5000${endpoint}`,
       {
         method: "DELETE",
+
         headers: {
           Authorization:
             `Bearer ${token}`
@@ -165,36 +192,36 @@ function AdminPage() {
       }
     );
 
-    fetchItems();
-    fetchStats();
+    const data = await res.json();
 
-  };
-
-  const deleteUser = async (id) => {
-
-    if (
-      !window.confirm(
-        "Delete this user?"
-      )
-    ) {
-      return;
+    if (!res.ok) {
+      throw new Error(
+        data.error ||
+        "Failed to delete"
+      );
     }
 
-    await fetch(
-      `http://localhost:5000/api/admin/users/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization:
-            `Bearer ${token}`
-        }
-      }
-    );
+    if (type === "user") {
+      fetchUsers();
+    } else {
+      fetchItems();
+    }
 
-    fetchUsers();
     fetchStats();
 
-  };
+  } catch (err) {
+
+    console.error(
+      "Delete error:",
+      err
+    );
+
+    alert(
+      err.message ||
+      "Failed to delete"
+    );
+  }
+};
 
   if (accessDenied) {
 
@@ -366,6 +393,31 @@ function AdminPage() {
         ))}
 
       </div>
+
+      <ConfirmModal
+  open={!!confirmAction}
+
+  title={
+    confirmAction?.type === "user"
+      ? "Delete User?"
+      : "Delete Item?"
+  }
+
+  message={
+    confirmAction?.type === "user"
+      ? "Are you sure you want to permanently delete this user?"
+      : "Are you sure you want to permanently delete this item?"
+  }
+
+  confirmText="Delete"
+  cancelText="Cancel"
+
+  onConfirm={handleConfirmDelete}
+
+  onCancel={() =>
+    setConfirmAction(null)
+  }
+/>
 
     </div>
   );

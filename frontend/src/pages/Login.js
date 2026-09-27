@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../services/auth';
 import './login.css';
+import BackButton from '../components/BackButton';
 
 function Login() {
   const [userId, setUserId] = useState('');
@@ -37,6 +38,8 @@ function Login() {
   return (
     <div className="auth-page">
 
+      <BackButton fallback="/" />
+
       <div className="auth-bg"></div>
 
       <div className="auth-card">
@@ -46,7 +49,7 @@ function Login() {
         </h1>
 
         <p className="subtitle">
-          Welcome Back 👋
+          Sign in to continue to your account
         </p>
 
         {error && (

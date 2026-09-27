@@ -12,6 +12,7 @@ import {
 } from '../services/auth';
 
 import './login.css';
+import BackButton from '../components/BackButton';
 
 function Register() {
 
@@ -75,6 +76,8 @@ function Register() {
 
   return (
     <div className="auth-page">
+
+      <BackButton fallback="/" />
 
       <div className="auth-bg"></div>
 

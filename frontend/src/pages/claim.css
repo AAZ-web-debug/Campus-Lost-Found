@@ -1,88 +1,470 @@
-.claim-container{
+/* =========================================================
+   CAMPUS LOST & FOUND — CLAIM PAGE
+   ========================================================= */
 
-  min-height:100vh;
-
-  background:linear-gradient(
-    135deg,
-    #4f46e5,
-    #9333ea
-  );
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  padding:30px;
-
-  position:relative;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.claim-container > .back-button{
-  position:absolute;
-  top:30px;
-  left:40px;
+body {
+  font-family:
+    "Segoe UI",
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  background: #080812;
 }
 
-.claim-card{
+/* =========================================================
+   PAGE
+   ========================================================= */
 
-  width:100%;
-  max-width:700px;
+.claim-container {
+  min-height: 100vh;
+
+  position: relative;
+
+  padding:
+    110px 24px 60px;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  color: #f8fafc;
 
   background:
-  rgba(255,255,255,0.12);
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(99, 102, 241, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(139, 92, 246, 0.12),
+      transparent 30%
+    ),
+    #080812;
 
-  backdrop-filter:
-  blur(20px);
-
-  border-radius:24px;
-
-  padding:30px;
-
-  display:flex;
-  flex-direction:column;
-
-  gap:15px;
-
-  color:white;
+  overflow-x: hidden;
 }
 
-.claim-card h1{
-  text-align:center;
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.claim-container > .back-button {
+  position: absolute;
+
+  top: 28px;
+  left: 30px;
+
+  z-index: 10;
 }
+
+/* =========================================================
+   CLAIM CARD
+   ========================================================= */
+
+.claim-card {
+  width: 100%;
+  max-width: 700px;
+
+  box-sizing: border-box;
+
+  padding: 34px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+
+  background:
+    rgba(17, 17, 31, 0.84);
+
+  border:
+    1px solid rgba(139, 92, 246, 0.16);
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.45),
+    0 0 50px rgba(99, 102, 241, 0.06);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  animation:
+    claimCardIn 0.45s ease-out;
+}
+
+/* =========================================================
+   CARD ANIMATION
+   ========================================================= */
+
+@keyframes claimCardIn {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.claim-card h1 {
+  margin: 0 0 6px;
+
+  text-align: center;
+
+  font-size:
+    clamp(32px, 5vw, 44px);
+
+  font-weight: 800;
+
+  letter-spacing: -1.2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #c4b5fd,
+      #818cf8
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  background-clip: text;
+}
+
+/* =========================================================
+   FORM FIELDS
+   ========================================================= */
 
 .claim-card textarea,
-.claim-card input{
+.claim-card input {
+  width: 100%;
 
-  width:100%;
+  box-sizing: border-box;
 
-  padding:14px;
+  padding:
+    15px 16px;
 
-  border:none;
+  border:
+    1px solid rgba(148, 163, 184, 0.14);
 
-  border-radius:12px;
+  border-radius: 13px;
 
-  outline:none;
+  outline: none;
+
+  background:
+    rgba(8, 8, 18, 0.8);
+
+  color: #f8fafc;
+
+  font-family: inherit;
+
+  font-size: 15px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
-.claim-card textarea{
-  min-height:120px;
+.claim-card textarea::placeholder,
+.claim-card input::placeholder {
+  color: #64748b;
 }
 
-.claim-card button{
+.claim-card textarea:hover,
+.claim-card input:hover {
+  border-color:
+    rgba(148, 163, 184, 0.22);
+}
 
-  border:none;
+.claim-card textarea:focus,
+.claim-card input:focus {
+  border-color:
+    rgba(129, 140, 248, 0.7);
 
-  padding:15px;
+  background:
+    rgba(10, 10, 23, 0.95);
 
-  border-radius:12px;
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.12),
+    0 0 25px rgba(99, 102, 241, 0.08);
+}
 
-  background:white;
+/* =========================================================
+   TEXTAREAS
+   ========================================================= */
 
-  color:#4f46e5;
+.claim-card textarea {
+  min-height: 120px;
 
-  font-weight:700;
+  resize: vertical;
 
-  cursor:pointer;
+  line-height: 1.5;
+}
+
+.claim-card textarea:first-of-type {
+  min-height: 135px;
+}
+
+/* =========================================================
+   DATE INPUT
+   ========================================================= */
+
+.claim-card input[type="date"] {
+  color-scheme: dark;
+
+  cursor: pointer;
+}
+
+.claim-card input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.7;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease;
+}
+
+.claim-card input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* =========================================================
+   SUBMIT BUTTON
+   ========================================================= */
+
+.claim-card button {
+  width: 100%;
+
+  min-height: 50px;
+
+  margin-top: 4px;
+
+  padding:
+    15px 20px;
+
+  border: none;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #7c3aed
+    );
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 30px rgba(99, 102, 241, 0.2);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.claim-card button:hover:not(:disabled) {
+  transform:
+    translateY(-2px);
+
+  filter: brightness(1.08);
+
+  box-shadow:
+    0 14px 35px rgba(99, 102, 241, 0.3);
+}
+
+.claim-card button:active:not(:disabled) {
+  transform:
+    translateY(0);
+}
+
+.claim-card button:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.16),
+    0 10px 30px rgba(99, 102, 241, 0.2);
+}
+
+.claim-card button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .claim-container {
+    padding:
+      100px 18px 45px;
+
+    align-items: flex-start;
+  }
+
+  .claim-container > .back-button {
+    top: 22px;
+    left: 20px;
+  }
+
+  .claim-card {
+    max-width: 650px;
+
+    padding: 25px;
+
+    border-radius: 20px;
+  }
+
+  .claim-card h1 {
+    font-size: 34px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .claim-container {
+    padding:
+      92px 14px 35px;
+  }
+
+  .claim-card {
+    padding: 20px;
+
+    gap: 15px;
+
+    border-radius: 18px;
+  }
+
+  .claim-card h1 {
+    font-size: 30px;
+
+    letter-spacing: -0.9px;
+  }
+
+  .claim-card textarea,
+  .claim-card input {
+    padding:
+      14px;
+
+    font-size: 14px;
+
+    border-radius: 11px;
+  }
+
+  .claim-card textarea {
+    min-height: 110px;
+  }
+
+  .claim-card textarea:first-of-type {
+    min-height: 125px;
+  }
+
+  .claim-card button {
+    min-height: 48px;
+
+    padding:
+      14px 18px;
+
+    font-size: 14px;
+  }
+}
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .claim-container {
+    padding:
+      88px 10px 28px;
+  }
+
+  .claim-card {
+    padding: 17px;
+
+    gap: 13px;
+  }
+
+  .claim-card h1 {
+    font-size: 27px;
+  }
+
+  .claim-card textarea,
+  .claim-card input {
+    padding:
+      13px;
+
+    font-size: 13px;
+  }
+
+  .claim-card button {
+    font-size: 13px;
+  }
+}
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) {
+  .claim-card button:hover:not(:disabled) {
+    transform: none;
+
+    filter: none;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .claim-card {
+    animation: none;
+  }
+
+  .claim-card textarea,
+  .claim-card input,
+  .claim-card button {
+    transition: none;
+  }
 }

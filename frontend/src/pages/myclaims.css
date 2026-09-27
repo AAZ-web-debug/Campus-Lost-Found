@@ -1,244 +1,628 @@
+/* =================================
+   CAMPUS LOST & FOUND — MY CLAIMS
+================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    "Segoe UI",
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  background: #080812;
+}
+
+/* =================================
+   PAGE
+================================= */
+
 .my-claims-page {
   min-height: 100vh;
-  padding: 40px;
-  background:
-    linear-gradient(
-      135deg,
-      #4f46e5,
-      #9333ea
-    );
-  color: white;
+
   position: relative;
+
+  padding: 110px 30px 70px;
+
+  color: #f8fafc;
+
+  background:
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(99, 102, 241, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 88% 25%,
+      rgba(139, 92, 246, 0.12),
+      transparent 30%
+    ),
+    #080812;
+
+  overflow-x: hidden;
 }
 
-.my-claims-page > .back-button {
-  position: absolute;
-  top: 30px;
-  left: 40px;
+/* =================================
+   BACK BUTTON
+================================= */
+
+.my-claims-shell > .back-button {
+  position: fixed;
+
+  top: 28px;
+  left: 30px;
+
+  z-index: 100;
 }
 
-.my-claims-header {
-  text-align: center;
-  padding-top: 20px;
-  margin-bottom: 40px;
-}
+/* =================================
+   MAIN SHELL
+================================= */
 
-.page-eyebrow {
-  display: none;
-}
+.my-claims-shell {
+  width: 100%;
 
-.my-claims-header h1 {
-  font-size: 42px;
-  margin: 0 0 10px;
-}
-
-.my-claims-header p {
-  margin: 0;
-  color: #e5e7eb;
-  font-size: 17px;
-}
-
-.claims-list {
-  display: grid;
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(350px, 1fr)
-    );
-  gap: 25px;
   max-width: 1200px;
+
   margin: 0 auto;
 }
 
-.my-claim-card {
+/* =================================
+   HEADER
+================================= */
+
+.my-claims-header {
+  text-align: center;
+
+  margin-bottom: 42px;
+}
+
+.page-eyebrow {
+  display: inline-block;
+
+  margin-bottom: 10px;
+
+  color: #818cf8;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.my-claims-header h1 {
+  margin: 0;
+
+  font-size:
+    clamp(36px, 5vw, 48px);
+
+  line-height: 1.1;
+
+  font-weight: 800;
+
+  letter-spacing: -1.5px;
+
   background:
-    rgba(
-      255,
-      255,
-      255,
-      0.12
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #c4b5fd,
+      #818cf8
     );
 
-  backdrop-filter:
-    blur(20px);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  background-clip: text;
+}
+
+.my-claims-header p {
+  margin: 13px 0 0;
+
+  color: #94a3b8;
+
+  font-size: 16px;
+
+  line-height: 1.6;
+}
+
+/* =================================
+   CLAIMS GRID
+================================= */
+
+.claims-list {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(430px, 1fr)
+    );
+
+  gap: 20px;
+}
+
+/* =================================
+   CLAIM CARD
+================================= */
+
+.my-claim-card {
+  min-width: 0;
+
+  padding: 24px;
+
+  background:
+    rgba(17, 17, 31, 0.82);
+
+  border:
+    1px solid rgba(139, 92, 246, 0.14);
 
   border-radius: 20px;
 
-  padding: 25px;
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.3);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
   transition:
-    transform 0.3s ease,
-    background 0.3s ease;
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .my-claim-card:hover {
-  transform: translateY(-5px);
+  transform:
+    translateY(-4px);
 
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.16
-    );
+  border-color:
+    rgba(129, 140, 248, 0.28);
+
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.4),
+    0 0 35px rgba(99, 102, 241, 0.06);
 }
+
+/* =================================
+   CARD MAIN
+================================= */
 
 .claim-card-main {
   display: flex;
+
   align-items: flex-start;
-  gap: 18px;
+
+  gap: 17px;
 }
 
 .claim-item-icon {
-  width: 55px;
-  height: 55px;
+  width: 52px;
+  height: 52px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
   flex-shrink: 0;
 
+  border-radius: 14px;
+
   background:
-    rgba(
-      255,
-      255,
-      255,
-      0.15
+    linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.16),
+      rgba(139, 92, 246, 0.08)
     );
 
-  border-radius: 15px;
+  border:
+    1px solid rgba(129, 140, 248, 0.12);
 
-  font-size: 25px;
+  font-size: 23px;
 }
 
 .claim-item-info {
   flex: 1;
+
   min-width: 0;
 }
 
+/* =================================
+   TITLE + STATUS
+================================= */
+
 .claim-title-row {
   display: flex;
+
   align-items: flex-start;
+
   justify-content: space-between;
-  gap: 15px;
+
+  gap: 14px;
 }
 
 .claim-title-row h2 {
   margin: 0;
-  font-size: 23px;
+
+  min-width: 0;
+
+  color: #f8fafc;
+
+  font-size: 21px;
+
+  line-height: 1.3;
+
+  font-weight: 700;
+
+  overflow-wrap: anywhere;
 }
+
+/* =================================
+   META
+================================= */
 
 .claim-meta {
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 8px;
 
   margin-top: 8px;
 
-  color: #e5e7eb;
-  font-size: 14px;
+  color: #94a3b8;
+
+  font-size: 13px;
+
+  line-height: 1.5;
 }
 
-.claim-description {
-  margin: 18px 0 8px;
+/* =================================
+   DESCRIPTION
+================================= */
 
-  color: #f3f4f6;
+.claim-description {
+  margin:
+    17px 0 8px;
+
+  color: #cbd5e1;
+
+  font-size: 14px;
 
   line-height: 1.6;
 }
 
 .claim-date {
-  color: #d1d5db;
-  font-size: 13px;
+  color: #64748b;
+
+  font-size: 12px;
 }
+
+/* =================================
+   STATUS BADGES
+================================= */
 
 .claim-status {
   display: inline-flex;
+
   align-items: center;
+
   gap: 6px;
 
   flex-shrink: 0;
 
-  padding: 8px 13px;
+  padding:
+    7px 11px;
 
   border-radius: 999px;
 
-  font-size: 12px;
+  font-size: 11px;
+
   font-weight: 700;
+
+  border:
+    1px solid transparent;
+
+  white-space: nowrap;
 }
 
 .claim-status.pending {
-  background: #f59e0b;
-  color: white;
+  background:
+    rgba(245, 158, 11, 0.1);
+
+  border-color:
+    rgba(245, 158, 11, 0.2);
+
+  color: #fbbf24;
 }
 
 .claim-status.approved {
-  background: #10b981;
-  color: white;
+  background:
+    rgba(16, 185, 129, 0.1);
+
+  border-color:
+    rgba(16, 185, 129, 0.2);
+
+  color: #34d399;
 }
 
 .claim-status.rejected {
-  background: #ef4444;
-  color: white;
+  background:
+    rgba(239, 68, 68, 0.1);
+
+  border-color:
+    rgba(239, 68, 68, 0.2);
+
+  color: #f87171;
 }
 
 .status-icon {
-  font-size: 13px;
+  font-size: 12px;
 }
+
+/* =================================
+   CONTACT SECTION
+================================= */
+
+.claim-contact-section {
+  margin-top: 20px;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* =================================
+   VIEW CONTACT BUTTON
+================================= */
+
+.contact-finder-btn {
+  width: 100%;
+
+  min-height: 44px;
+
+  padding:
+    12px 16px;
+
+  border:
+    1px solid rgba(129, 140, 248, 0.2);
+
+  border-radius: 11px;
+
+  background:
+    rgba(99, 102, 241, 0.1);
+
+  color: #a5b4fc;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.contact-finder-btn:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+
+  background:
+    rgba(99, 102, 241, 0.17);
+
+  border-color:
+    rgba(129, 140, 248, 0.35);
+}
+
+.contact-finder-btn:active:not(:disabled) {
+  transform:
+    translateY(0);
+}
+
+.contact-finder-btn:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.contact-finder-btn:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+/* =================================
+   CONTACT CARD
+================================= */
+
+.claim-contact-card {
+  margin-top: 14px;
+
+  padding: 18px;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(16, 185, 129, 0.08),
+      rgba(17, 17, 31, 0.8)
+    );
+
+  border:
+    1px solid rgba(16, 185, 129, 0.16);
+
+  color: #f8fafc;
+}
+
+/* =================================
+   CONTACT HEADER
+================================= */
+
+.contact-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 12px;
+
+  margin-bottom: 15px;
+}
+
+.contact-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  background:
+    rgba(16, 185, 129, 0.1);
+
+  font-size: 18px;
+}
+
+.contact-header h3 {
+  margin:
+    0 0 4px;
+
+  color: #f8fafc;
+
+  font-size: 15px;
+}
+
+.contact-header p {
+  margin: 0;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+/* =================================
+   CONTACT DETAILS
+================================= */
+
+.contact-detail {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  min-width: 0;
+
+  padding:
+    10px 0;
+
+  color: #cbd5e1;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  overflow-wrap: anywhere;
+}
+
+.contact-detail span:last-child {
+  min-width: 0;
+
+  overflow-wrap: anywhere;
+}
+
+.contact-detail + .contact-detail {
+  border-top:
+    1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* =================================
+   LOADING / EMPTY STATES
+================================= */
 
 .my-claims-state {
   max-width: 700px;
+
   margin: 0 auto;
 
-  padding: 60px 30px;
+  padding:
+    65px 30px;
 
   text-align: center;
 
   background:
-    rgba(
-      255,
-      255,
-      255,
-      0.12
-    );
+    rgba(17, 17, 31, 0.82);
 
-  backdrop-filter:
-    blur(20px);
+  border:
+    1px solid rgba(139, 92, 246, 0.14);
 
-  border-radius: 20px;
+  border-radius: 22px;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .my-claims-state p {
-  color: #e5e7eb;
+  margin:
+    8px 0 0;
+
+  color: #94a3b8;
+
   line-height: 1.6;
 }
 
-.state-icon {
-  font-size: 50px;
-  margin-bottom: 15px;
+.my-claims-state h2 {
+  margin: 0;
+
+  color: #f8fafc;
+
+  font-size: 24px;
 }
 
-.my-claims-state h2 {
-  margin-bottom: 10px;
+.state-icon {
+  margin-bottom: 16px;
+
+  font-size: 48px;
 }
 
 .state-spinner {
-  width: 35px;
-  height: 35px;
+  width: 34px;
+  height: 34px;
 
-  margin: 0 auto 15px;
+  margin:
+    0 auto 16px;
 
   border:
-    4px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.25
-    );
+    3px solid rgba(129, 140, 248, 0.15);
 
-  border-top-color: white;
+  border-top-color:
+    #818cf8;
 
   border-radius: 50%;
 
@@ -249,142 +633,304 @@
     infinite;
 }
 
+@keyframes claims-spin {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+/* =================================
+   BROWSE BUTTON
+================================= */
+
 .browse-button {
-  margin-top: 15px;
+  margin-top: 20px;
+
+  min-height: 44px;
+
+  padding:
+    12px 19px;
 
   border: none;
 
-  padding: 12px 20px;
+  border-radius: 11px;
 
-  border-radius: 12px;
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #7c3aed
+    );
 
-  background: white;
+  color: white;
 
-  color: #4f46e5;
+  font-family: inherit;
+
+  font-size: 13px;
 
   font-weight: 700;
 
   cursor: pointer;
 
+  box-shadow:
+    0 8px 25px rgba(99, 102, 241, 0.2);
+
   transition:
     transform 0.2s ease,
-    background 0.2s ease;
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
 }
 
 .browse-button:hover {
-  transform: translateY(-2px);
+  transform:
+    translateY(-2px);
 
-  background: #f3f4f6;
+  filter: brightness(1.08);
+
+  box-shadow:
+    0 12px 30px rgba(99, 102, 241, 0.3);
 }
 
-@keyframes claims-spin {
-  to {
-    transform: rotate(360deg);
+.browse-button:active {
+  transform:
+    translateY(0);
+}
+
+.browse-button:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.14),
+    0 8px 25px rgba(99, 102, 241, 0.2);
+}
+
+/* =================================
+   TABLET
+================================= */
+
+@media (max-width: 900px) {
+  .claims-list {
+    grid-template-columns: 1fr;
   }
 }
+
+/* =================================
+   SMALL TABLET
+================================= */
 
 @media (max-width: 768px) {
-
   .my-claims-page {
-    padding: 30px 20px 50px;
+    padding:
+      100px 18px 50px;
   }
 
-  .my-claims-page > .back-button {
-    position: static;
-    margin-bottom: 20px;
+  .my-claims-shell > .back-button {
+    top: 22px;
+    left: 20px;
   }
 
   .my-claims-header {
-    padding-top: 10px;
+    margin-bottom: 30px;
   }
 
   .my-claims-header h1 {
     font-size: 36px;
   }
 
-  .claims-list {
-    grid-template-columns: 1fr;
+  .my-claims-header p {
+    font-size: 14px;
+  }
+
+  .my-claim-card {
+    padding: 20px;
   }
 
   .claim-title-row {
     flex-direction: column;
+
+    align-items: flex-start;
   }
 
   .claim-status {
     align-self: flex-start;
+  }
+}
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 480px) {
+  .my-claims-page {
+    padding:
+      95px 14px 40px;
+  }
+
+  .my-claims-header {
+    margin-bottom: 25px;
+  }
+
+  .page-eyebrow {
+    font-size: 10px;
+
+    letter-spacing: 1.7px;
+  }
+
+  .my-claims-header h1 {
+    font-size: 32px;
+  }
+
+  .my-claims-header p {
+    margin-top: 10px;
+
+    font-size: 13px;
   }
 
   .claim-card-main {
     gap: 12px;
   }
 
+  .claim-item-icon {
+    width: 45px;
+    height: 45px;
+
+    font-size: 20px;
+  }
+
+  .claim-title-row h2 {
+    font-size: 18px;
+  }
+
+  .claim-meta {
+    font-size: 12px;
+
+    gap: 6px;
+  }
+
+  .claim-description {
+    font-size: 13px;
+  }
+
+  .my-claim-card {
+    padding: 18px;
+
+    border-radius: 17px;
+  }
+
+  .claim-contact-card {
+    padding: 15px;
+  }
+
+  .contact-header {
+    gap: 10px;
+  }
+
+  .contact-header h3 {
+    font-size: 14px;
+  }
+
+  .contact-header p {
+    font-size: 11px;
+  }
+
+  .contact-detail {
+    font-size: 12px;
+  }
+
+  .my-claims-state {
+    padding:
+      50px 20px;
+
+    border-radius: 18px;
+  }
+
+  .my-claims-state h2 {
+    font-size: 21px;
+  }
+
+  .state-icon {
+    font-size: 42px;
+  }
 }
 
-.claim-contact-section {
-  margin-top: 20px;
+/* =================================
+   SMALL PHONES
+================================= */
+
+@media (max-width: 360px) {
+  .my-claims-page {
+    padding:
+      90px 10px 30px;
+  }
+
+  .my-claims-header h1 {
+    font-size: 29px;
+  }
+
+  .my-claim-card {
+    padding: 15px;
+  }
+
+  .claim-card-main {
+    gap: 9px;
+  }
+
+  .claim-item-icon {
+    width: 40px;
+    height: 40px;
+
+    font-size: 18px;
+  }
+
+  .claim-title-row h2 {
+    font-size: 17px;
+  }
+
+  .claim-status {
+    padding:
+      6px 9px;
+
+    font-size: 10px;
+  }
+
+  .contact-finder-btn {
+    font-size: 12px;
+  }
 }
 
-.contact-finder-btn {
-  border: none;
-  padding: 11px 16px;
-  border-radius: 10px;
-  background: #4f46e5;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s ease;
+/* =================================
+   TOUCH DEVICES
+================================= */
+
+@media (hover: none) {
+  .my-claim-card:hover {
+    transform: none;
+  }
+
+  .contact-finder-btn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .browse-button:hover {
+    transform: none;
+
+    filter: none;
+  }
 }
 
-.contact-finder-btn:hover {
-  transform: translateY(-1px);
-  background: #4338ca;
-}
+/* =================================
+   REDUCED MOTION
+================================= */
 
-.contact-finder-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+@media (prefers-reduced-motion: reduce) {
+  .my-claim-card,
+  .contact-finder-btn,
+  .browse-button {
+    transition: none;
+  }
 
-.claim-contact-card {
-  margin-top: 15px;
-  padding: 18px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(79, 70, 229, 0.2);
-  color: #111827;
-}
-
-.contact-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 15px;
-}
-
-.contact-icon {
-  font-size: 24px;
-}
-
-.contact-header h3 {
-  margin: 0 0 4px;
-  font-size: 17px;
-}
-
-.contact-header p {
-  margin: 0;
-  color: #6b7280;
-  font-size: 13px;
-}
-
-.contact-detail {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 0;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.contact-detail + .contact-detail {
-  border-top: 1px solid #e5e7eb;
+  .state-spinner {
+    animation: none;
+  }
 }

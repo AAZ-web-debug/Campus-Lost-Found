@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const Database = require('better-sqlite3');
 const bcrypt = require('bcryptjs');
@@ -9,7 +11,11 @@ const fs = require('fs');
 
 const app = express();
 const PORT = 5000;
-const JWT_SECRET = 'campus-lnf-secret-key-2026';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET is not configured');
+}
 
 app.use(cors());
 app.use(express.json());
@@ -31,6 +37,7 @@ app.use('/uploads', express.static(uploadsDir));
 ========================= */
 
 const db = new Database('campus_lnf.db');
+db.pragma('foreign_keys = ON');
 
 /* USERS */
 
@@ -120,15 +127,41 @@ CREATE TABLE IF NOT EXISTS claim_contacts (
 
 const storage = multer.diskStorage({
   destination: uploadsDir,
+
   filename: (req, file, cb) => {
-    cb(
-      null,
-      Date.now() + '-' + file.originalname
-    );
+    const extension = path.extname(file.originalname).toLowerCase();
+
+    const safeName =
+      `${Date.now()}-${Math.random().toString(36).slice(2)}${extension}`;
+
+    cb(null, safeName);
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+
+  limits: {
+    fileSize: 5 * 1024 * 1024
+  },
+
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = [
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'image/gif'
+    ];
+
+    if (!allowedTypes.includes(file.mimetype)) {
+      return cb(
+        new Error('Only JPEG, PNG, WEBP and GIF images are allowed')
+      );
+    }
+
+    cb(null, true);
+  }
+});
 
 /* =========================
    AUTH MIDDLEWARE
@@ -173,29 +206,68 @@ const authenticateToken = (
 app.post(
   '/api/register',
   async (req, res) => {
-
     try {
+      const { userId, password } = req.body;
 
-      const {
-        userId,
-        password
-      } = req.body;
+      // Validate input types
+      if (
+        typeof userId !== 'string' ||
+        typeof password !== 'string'
+      ) {
+        return res.status(400).json({
+          error: 'User ID and password are required'
+        });
+      }
 
-      const hashed =
-        await bcrypt.hash(
-          password,
-          10
-        );
+      const cleanUserId = userId.trim();
+
+      // Basic validation
+      if (!cleanUserId || !password) {
+        return res.status(400).json({
+          error: 'User ID and password are required'
+        });
+      }
+
+      // Prevent excessively large input
+      if (cleanUserId.length > 50) {
+        return res.status(400).json({
+          error: 'User ID must be 50 characters or less'
+        });
+      }
+
+      if (password.length > 128) {
+        return res.status(400).json({
+          error: 'Password must be 128 characters or less'
+        });
+      }
+
+      // Check if user already exists
+      const existingUser = db.prepare(`
+        SELECT id
+        FROM users
+        WHERE user_id = ?
+      `).get(cleanUserId);
+
+      if (existingUser) {
+        return res.status(400).json({
+          error: 'User already exists'
+        });
+      }
+
+      // Hash password
+      const hashed = await bcrypt.hash(
+        password,
+        10
+      );
 
       db.prepare(`
-        INSERT INTO users
-        (
+        INSERT INTO users (
           user_id,
           password
         )
         VALUES (?, ?)
       `).run(
-        userId,
+        cleanUserId,
         hashed
       );
 
@@ -203,13 +275,12 @@ app.post(
         message: 'Registered'
       });
 
-    } catch {
+    } catch (err) {
+      console.error('Registration error:', err);
 
-      res.status(400).json({
-        error:
-          'User already exists'
+      res.status(500).json({
+        error: 'Registration failed'
       });
-
     }
   }
 );
@@ -221,48 +292,72 @@ app.post(
 app.post(
   '/api/login',
   async (req, res) => {
+    try {
+      const { userId, password } = req.body;
 
-    const {
-      userId,
-      password
-    } = req.body;
+      if (
+        typeof userId !== 'string' ||
+        typeof password !== 'string'
+      ) {
+        return res.status(400).json({
+          error: 'Invalid user ID or password'
+        });
+      }
 
-    const user = db.prepare(`
-      SELECT *
-      FROM users
-      WHERE user_id = ?
-    `).get(userId);
+      const cleanUserId = userId.trim();
 
-    if (!user) {
-      return res.status(400).json({
-        error: 'Invalid user'
-      });
-    }
+      if (!cleanUserId || !password) {
+        return res.status(400).json({
+          error: 'Invalid user ID or password'
+        });
+      }
 
-    const valid =
-      await bcrypt.compare(
+      const user = db.prepare(`
+        SELECT *
+        FROM users
+        WHERE user_id = ?
+      `).get(cleanUserId);
+
+      if (!user) {
+        return res.status(401).json({
+          error: 'Invalid user ID or password'
+        });
+      }
+
+      const valid = await bcrypt.compare(
         password,
         user.password
       );
 
-    if (!valid) {
-      return res.status(400).json({
-        error: 'Wrong password'
+      if (!valid) {
+        return res.status(401).json({
+          error: 'Invalid user ID or password'
+        });
+      }
+
+      const token = jwt.sign(
+        {
+          userId: user.user_id,
+          role: user.role
+        },
+        JWT_SECRET,
+        {
+          expiresIn: '2h'
+        }
+      );
+
+      res.json({
+        token,
+        role: user.role
+      });
+
+    } catch (err) {
+      console.error('Login error:', err);
+
+      res.status(500).json({
+        error: 'Login failed'
       });
     }
-
-    const token = jwt.sign(
-      {
-        userId,
-        role: user.role
-      },
-      JWT_SECRET
-    );
-
-    res.json({
-  token,
-  role: user.role
-});
   }
 );
 
@@ -304,11 +399,56 @@ app.post(
     } = req.body;
 
     if (!req.file) {
-      return res.status(400).json({
-        error:
-          'No image uploaded'
-      });
-    }
+  return res.status(400).json({
+    error: 'No image uploaded'
+  });
+}
+
+const cleanTitle =
+  typeof title === 'string' ? title.trim() : '';
+
+const cleanCategory =
+  typeof category === 'string' ? category.trim() : '';
+
+const cleanLocation =
+  typeof location === 'string' ? location.trim() : '';
+
+if (!cleanTitle || !cleanCategory || !cleanLocation) {
+  // Remove uploaded image if validation fails
+  if (req.file?.path && fs.existsSync(req.file.path)) {
+    fs.unlinkSync(req.file.path);
+  }
+
+  return res.status(400).json({
+    error: 'Title, category and location are required'
+  });
+}
+
+if (
+  cleanTitle.length > 100 ||
+  cleanCategory.length > 50 ||
+  cleanLocation.length > 150
+) {
+  if (req.file?.path && fs.existsSync(req.file.path)) {
+    fs.unlinkSync(req.file.path);
+  }
+
+  if (cleanTitle.length > 100) {
+    return res.status(400).json({
+      error: 'Title must be 100 characters or less'
+    });
+  }
+
+  if (cleanCategory.length > 50) {
+    return res.status(400).json({
+      error: 'Category must be 50 characters or less'
+    });
+  }
+
+  return res.status(400).json({
+    error: 'Location must be 150 characters or less'
+  });
+}
 
     const imagePath =
       `/uploads/${req.file.filename}`;
@@ -326,15 +466,17 @@ app.post(
       )
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
-      req.user.userId,
-      title,
-      category,
-      description,
-      verification_detail,
-      imagePath,
-      location,
-      'found'
-    );
+  req.user.userId,
+  cleanTitle,
+  cleanCategory,
+  typeof description === 'string' ? description.trim() : null,
+  typeof verification_detail === 'string'
+    ? verification_detail.trim()
+    : null,
+  imagePath,
+  cleanLocation,
+  'found'
+);
 
     res.json({
       message:
@@ -821,11 +963,18 @@ app.post(
       });
     }
 
-    db.prepare(`
-      UPDATE claims
-      SET status='rejected'
-      WHERE id=?
-    `).run(req.params.id);
+    const result = db.prepare(`
+  UPDATE claims
+  SET status='rejected'
+  WHERE id=?
+    AND status='pending'
+`).run(req.params.id);
+
+if (result.changes === 0) {
+  return res.status(400).json({
+    error: 'Only pending claims can be rejected'
+  });
+}
 
     res.json({
       message:
@@ -885,20 +1034,6 @@ app.get(
     });
   }
 );
-
-/* =========================
-   START SERVER
-========================= */
-
-app.listen(
-  PORT,
-  () => {
-    console.log(
-      `🚀 Campus Lost & Found Backend V3 running on port ${PORT}`
-    );
-  }
-);
-
 
 /* =========================
     ADMIN ROUTES
@@ -1083,48 +1218,98 @@ app.delete(
   authenticateToken,
   (req, res) => {
 
-    const admin = db.prepare(`
-      SELECT *
-      FROM users
-      WHERE user_id = ?
-    `).get(req.user.userId);
+    try {
 
-    if (
-      !admin ||
-      admin.role !== 'admin'
-    ) {
-      return res.status(403).json({
-        error: 'Access denied'
-      });
-    }
+      // Check that requester is an admin
+      const admin = db.prepare(`
+        SELECT *
+        FROM users
+        WHERE user_id = ?
+      `).get(req.user.userId);
 
-    const targetUser =
-      db.prepare(`
+      if (
+        !admin ||
+        admin.role !== 'admin'
+      ) {
+        return res.status(403).json({
+          error: 'Access denied'
+        });
+      }
+
+      const userId = Number(req.params.id);
+
+      if (!Number.isInteger(userId)) {
+        return res.status(400).json({
+          error: 'Invalid user ID'
+        });
+      }
+
+      // Find target user
+      const targetUser = db.prepare(`
         SELECT *
         FROM users
         WHERE id = ?
-      `).get(req.params.id);
+      `).get(userId);
 
-    if (
-      targetUser &&
-      targetUser.role === 'admin'
-    ) {
-      return res.status(400).json({
-        error:
-          'Cannot delete admin'
+      if (!targetUser) {
+        return res.status(404).json({
+          error: 'User not found'
+        });
+      }
+
+      // Never allow an admin to delete another admin
+      if (targetUser.role === 'admin') {
+        return res.status(400).json({
+          error: 'Cannot delete admin'
+        });
+      }
+
+      /*
+        Anonymize the user's existing activity
+        instead of deleting it.
+      */
+
+      const deleteUser = db.transaction(() => {
+
+        // Preserve reported items
+        db.prepare(`
+          UPDATE items
+          SET finder_id = '[deleted-user]'
+          WHERE finder_id = ?
+        `).run(targetUser.user_id);
+
+        // Preserve claims
+        db.prepare(`
+          UPDATE claims
+          SET claimer_id = '[deleted-user]'
+          WHERE claimer_id = ?
+        `).run(targetUser.user_id);
+
+        // Delete the actual account
+        db.prepare(`
+          DELETE FROM users
+          WHERE id = ?
+        `).run(userId);
+      });
+
+      deleteUser();
+
+      res.json({
+        message:
+          'User deleted and associated activity anonymized'
+      });
+
+    } catch (err) {
+
+      console.error(
+        'Delete user error:',
+        err
+      );
+
+      res.status(500).json({
+        error: 'Failed to delete user'
       });
     }
-
-    db.prepare(`
-      DELETE FROM users
-      WHERE id = ?
-    `).run(req.params.id);
-
-    res.json({
-      message:
-        'User deleted'
-    });
-
   }
 );
 
@@ -1138,29 +1323,156 @@ app.delete(
   authenticateToken,
   (req, res) => {
 
-    const user = db.prepare(`
-      SELECT *
-      FROM users
-      WHERE user_id = ?
-    `).get(req.user.userId);
+    try {
 
-    if (
-      !user ||
-      user.role !== 'admin'
-    ) {
-      return res.status(403).json({
-        error: 'Access denied'
+      // Check that the requester is an admin
+      const admin = db.prepare(`
+        SELECT *
+        FROM users
+        WHERE user_id = ?
+      `).get(req.user.userId);
+
+      if (
+        !admin ||
+        admin.role !== 'admin'
+      ) {
+        return res.status(403).json({
+          error: 'Access denied'
+        });
+      }
+
+      const itemId = Number(req.params.id);
+
+      if (!Number.isInteger(itemId)) {
+        return res.status(400).json({
+          error: 'Invalid item ID'
+        });
+      }
+
+      // Check that the item exists
+      const item = db.prepare(`
+        SELECT *
+        FROM items
+        WHERE id = ?
+      `).get(itemId);
+
+      if (!item) {
+        return res.status(404).json({
+          error: 'Item not found'
+        });
+      }
+
+      /*
+        Delete everything related to the item
+        before deleting the item itself.
+      */
+
+      const deleteItem = db.transaction(() => {
+
+        // Delete contact details belonging
+        // to claims for this item
+        db.prepare(`
+          DELETE FROM claim_contacts
+          WHERE claim_id IN (
+            SELECT id
+            FROM claims
+            WHERE item_id = ?
+          )
+        `).run(itemId);
+
+        // Delete all claims belonging
+        // to this item
+        db.prepare(`
+          DELETE FROM claims
+          WHERE item_id = ?
+        `).run(itemId);
+
+        // Delete the item
+        db.prepare(`
+          DELETE FROM items
+          WHERE id = ?
+        `).run(itemId);
+
+      });
+
+      deleteItem();
+
+      /*
+        Remove the uploaded image from disk
+        after the database deletion succeeds.
+      */
+
+      if (item.image_path) {
+
+        const imagePath =
+          path.join(
+            __dirname,
+            item.image_path.replace(
+              /^\/uploads[\\/]/,
+              'uploads/'
+            )
+          );
+
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
+      }
+
+      res.json({
+        message: 'Item deleted successfully'
+      });
+
+    } catch (err) {
+
+      console.error(
+        'Delete item error:',
+        err
+      );
+
+      res.status(500).json({
+        error:
+          'Failed to delete item'
+      });
+
+    }
+  }
+);
+
+/* =========================
+   GLOBAL ERROR HANDLER
+========================= */
+
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({
+        error: 'Image must be 5 MB or smaller'
       });
     }
 
-    db.prepare(`
-      DELETE FROM items
-      WHERE id = ?
-    `).run(req.params.id);
-
-    res.json({
-      message: 'Item deleted'
+    return res.status(400).json({
+      error: 'Image upload failed'
     });
+  }
 
+  if (err) {
+    return res.status(400).json({
+      error: err.message || 'Request failed'
+    });
+  }
+
+  next();
+});
+
+/* =========================
+   START SERVER
+========================= */
+
+app.listen(
+  PORT,
+  () => {
+    console.log(
+      `🚀 Campus Lost & Found Backend V3 running on port ${PORT}`
+    );
   }
 );

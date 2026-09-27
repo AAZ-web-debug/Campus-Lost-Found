@@ -1,11 +1,10 @@
+/* =================================
+   CONFIRM MODAL
+================================= */
+
 .confirm-overlay {
   position: fixed;
-
   inset: 0;
-
-  background: rgba(15, 15, 30, 0.55);
-
-  backdrop-filter: blur(6px);
 
   display: flex;
   align-items: center;
@@ -13,107 +12,224 @@
 
   padding: 20px;
 
+  background: rgba(3, 3, 10, 0.76);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
   z-index: 10000;
 
-  animation:
-    confirmFadeIn 0.2s ease;
+  animation: confirmFadeIn 0.2s ease;
 }
 
+
+/* =================================
+   MODAL
+================================= */
+
 .confirm-modal {
+  position: relative;
+
   width: min(430px, 100%);
 
-  background: white;
-
-  border-radius: 22px;
+  box-sizing: border-box;
 
   padding: 30px;
 
   text-align: center;
 
-  box-shadow:
-    0 25px 80px rgba(0, 0, 0, 0.3);
+  color: #f8fafc;
 
-  animation:
-    confirmScaleIn 0.25s ease;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(23, 23, 42, 0.98),
+      rgba(10, 10, 22, 0.99)
+    );
+
+  border: 1px solid rgba(139, 92, 246, 0.2);
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.58),
+    0 0 60px rgba(99, 102, 241, 0.07);
+
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+
+  animation: confirmScaleIn 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+
+/* =================================
+   WARNING ICON
+================================= */
 
 .confirm-icon {
   width: 58px;
   height: 58px;
 
-  margin: 0 auto 16px;
-
-  border-radius: 50%;
+  margin: 0 auto 18px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: #fff3cd;
+  border-radius: 16px;
 
-  font-size: 27px;
+  background: rgba(245, 158, 11, 0.08);
+
+  border: 1px solid rgba(245, 158, 11, 0.2);
+
+  font-size: 25px;
+
+  box-shadow:
+    0 8px 25px rgba(245, 158, 11, 0.06);
 }
+
+
+/* =================================
+   HEADING
+================================= */
 
 .confirm-modal h2 {
   margin: 0 0 10px;
 
-  color: #1f1f1f;
+  color: #f8fafc;
 
-  font-size: 22px;
+  font-size: 23px;
+  font-weight: 800;
+
+  letter-spacing: -0.4px;
 }
+
+
+/* =================================
+   MESSAGE
+================================= */
 
 .confirm-modal p {
+  max-width: 340px;
+
   margin: 0 auto 25px;
 
-  color: #666;
+  color: #9ca3af;
 
-  line-height: 1.5;
+  font-size: 14px;
 
-  max-width: 340px;
+  line-height: 1.6;
 }
+
+
+/* =================================
+   ACTIONS
+================================= */
 
 .confirm-actions {
   display: flex;
 
   justify-content: center;
 
-  gap: 12px;
+  gap: 10px;
 }
 
 .confirm-actions button {
-  border: none;
+  min-width: 105px;
 
-  padding: 12px 22px;
+  padding: 12px 20px;
 
   border-radius: 11px;
 
+  font-family: inherit;
+
+  font-size: 13px;
   font-weight: 700;
 
   cursor: pointer;
 
   transition:
     transform 0.2s ease,
-    opacity 0.2s ease;
+    background 0.2s ease,
+    border-color 0.2s ease,
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.confirm-actions button:hover {
-  transform: translateY(-1px);
-}
+
+/* =================================
+   CANCEL
+================================= */
 
 .confirm-cancel {
-  background: #f1f1f1;
+  border: 1px solid rgba(148, 163, 184, 0.14);
 
-  color: #333;
+  background: rgba(148, 163, 184, 0.06);
+
+  color: #cbd5e1;
 }
+
+.confirm-cancel:hover {
+  transform: translateY(-1px);
+
+  border-color: rgba(148, 163, 184, 0.22);
+
+  background: rgba(148, 163, 184, 0.11);
+
+  color: #ffffff;
+}
+
+
+/* =================================
+   DANGER
+================================= */
 
 .confirm-danger {
-  background: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.22);
 
-  color: white;
+  background:
+    linear-gradient(
+      135deg,
+      #dc2626,
+      #ef4444
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 8px 25px rgba(239, 68, 68, 0.14);
 }
 
-@keyframes confirmFadeIn {
+.confirm-danger:hover {
+  transform: translateY(-2px);
 
+  filter: brightness(1.07);
+
+  box-shadow:
+    0 12px 32px rgba(239, 68, 68, 0.24);
+}
+
+.confirm-danger:active {
+  transform: translateY(0) scale(0.98);
+}
+
+
+/* =================================
+   FOCUS
+================================= */
+
+.confirm-actions button:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.7);
+
+  outline-offset: 3px;
+}
+
+
+/* =================================
+   ANIMATIONS
+================================= */
+
+@keyframes confirmFadeIn {
   from {
     opacity: 0;
   }
@@ -121,24 +237,60 @@
   to {
     opacity: 1;
   }
-
 }
 
 @keyframes confirmScaleIn {
-
   from {
     opacity: 0;
-    transform: scale(0.94);
+
+    transform:
+      scale(0.95)
+      translateY(10px);
   }
 
   to {
     opacity: 1;
-    transform: scale(1);
-  }
 
+    transform:
+      scale(1)
+      translateY(0);
+  }
 }
 
+
+/* =================================
+   MOBILE
+================================= */
+
 @media (max-width: 500px) {
+  .confirm-overlay {
+    padding: 16px;
+  }
+
+  .confirm-modal {
+    padding: 25px 20px;
+
+    border-radius: 19px;
+  }
+
+  .confirm-icon {
+    width: 54px;
+    height: 54px;
+
+    margin-bottom: 16px;
+
+    font-size: 23px;
+  }
+
+  .confirm-modal h2 {
+    font-size: 21px;
+  }
+
+  .confirm-modal p {
+    font-size: 13px;
+
+    margin-bottom: 22px;
+  }
 
   .confirm-actions {
     flex-direction: column-reverse;
@@ -147,5 +299,4 @@
   .confirm-actions button {
     width: 100%;
   }
-
 }

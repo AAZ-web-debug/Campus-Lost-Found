@@ -1,36 +1,111 @@
+/* ================================
+   BACK BUTTON
+================================ */
+
 .back-button {
   display: inline-flex;
   align-items: center;
   gap: 9px;
 
-  padding: 10px 16px;
+  padding: 10px 15px;
 
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 10px;
 
-  background: rgba(255, 255, 255, 0.06);
-  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.045);
+
+  color: #d4d4dc;
 
   font-size: 14px;
   font-weight: 600;
 
   cursor: pointer;
 
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.16);
 
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
-    transform 0.2s ease;
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
+
+/* ================================
+   HOVER
+================================ */
 
 .back-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(99, 102, 241, 0.09);
+
+  border-color: rgba(99, 102, 241, 0.28);
+
+  color: #ffffff;
+
   transform: translateX(-3px);
+
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.22),
+    0 0 18px rgba(99, 102, 241, 0.08);
 }
 
+
+/* ================================
+   ACTIVE
+================================ */
+
+.back-button:active {
+  transform: translateX(-1px) scale(0.98);
+}
+
+
+/* ================================
+   ARROW
+================================ */
+
 .back-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   font-size: 18px;
   line-height: 1;
+
+  transition: transform 0.2s ease;
+}
+
+.back-button:hover .back-arrow {
+  transform: translateX(-2px);
+}
+
+
+/* ================================
+   FOCUS
+================================ */
+
+.back-button:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.65);
+  outline-offset: 3px;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+  .back-button {
+    padding: 9px 13px;
+    gap: 7px;
+    font-size: 13px;
+  }
+
+  .back-arrow {
+    font-size: 17px;
+  }
 }

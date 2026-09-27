@@ -29,7 +29,7 @@ function ReturnedItems() {
       <BackButton fallback="/dashboard" />
 
       <h1>
-        ✅ Recovered Items
+         Recovered Items
       </h1>
 
       <p className="returned-subtitle">

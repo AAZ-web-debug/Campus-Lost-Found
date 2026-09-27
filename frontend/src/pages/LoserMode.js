@@ -7,8 +7,8 @@ function LoserMode() {
   const [items, setItems] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-  const [selectedImage, setSelectedImage] =
-  useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -17,42 +17,57 @@ function LoserMode() {
   }, []);
 
   const fetchItems = async () => {
-    const token = localStorage.getItem("token");
+    try {
+      setError("");
 
-    const res = await fetch(
-      "http://localhost:5000/api/items",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setError("Please log in to browse found items.");
+        return;
       }
-    );
 
-    const data = await res.json();
-    setItems(data);
+      const res = await fetch("http://localhost:5000/api/items", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to load items");
+      }
+
+      if (!Array.isArray(data)) {
+        throw new Error("Invalid items response from server");
+      }
+
+      setItems(data);
+    } catch (err) {
+      console.error("Failed to fetch items:", err);
+      setItems([]);
+      setError(err.message || "Failed to load items");
+    }
   };
 
   const filteredItems = items.filter((item) => {
-    const matchesSearch =
-      (item.title || "")
-        .toLowerCase()
-        .includes(search.toLowerCase());
+    const matchesSearch = (item.title || "")
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
     const matchesCategory =
       category === "All"
         ? true
         : item.category === category;
 
-    return (
-      matchesSearch &&
-      matchesCategory
-    );
+    return matchesSearch && matchesCategory;
   });
 
   return (
     <div className="loser-container">
 
-       <BackButton fallback="/dashboard" />
+      <BackButton fallback="/dashboard" />
 
       <div className="loser-header">
         <h1>📦 Browse Found Items</h1>
@@ -67,16 +82,12 @@ function LoserMode() {
           type="text"
           placeholder="Search item..."
           value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
+          onChange={(e) => setSearch(e.target.value)}
         />
 
         <select
           value={category}
-          onChange={(e) =>
-            setCategory(e.target.value)
-          }
+          onChange={(e) => setCategory(e.target.value)}
         >
           <option>All</option>
           <option>Electronics</option>
@@ -90,16 +101,22 @@ function LoserMode() {
 
       </div>
 
+      {error && (
+        <div className="empty-state">
+          {error}
+        </div>
+      )}
+
       <div className="items-grid">
 
-        {filteredItems.length === 0 && (
+        {!error && filteredItems.length === 0 && (
           <div className="empty-state">
             No matching items found.
           </div>
         )}
 
         {filteredItems.map((item) => (
-          
+
           <div
             className="item-card"
             key={item.id}
@@ -108,7 +125,7 @@ function LoserMode() {
             {item.image_path && (
               <img
                 src={`http://localhost:5000${item.image_path}`}
-                alt="item"
+                alt={item.title || "Found item"}
                 className="item-image"
                 onClick={() =>
                   setSelectedImage(
@@ -149,20 +166,19 @@ function LoserMode() {
 
       </div>
 
-    {selectedImage && (
-  <div
-    className="image-modal"
-    onClick={() =>
-      setSelectedImage(null)
-    }
-  >
-    <img
-      src={selectedImage}
-      alt="preview"
-      className="modal-image"
-    />
-  </div>
-)}
+      {selectedImage && (
+        <div
+          className="image-modal"
+          onClick={() => setSelectedImage(null)}
+        >
+          <img
+            src={selectedImage}
+            alt="preview"
+            className="modal-image"
+          />
+        </div>
+      )}
+
     </div>
   );
 }

@@ -1,47 +1,114 @@
+/* =================================
+   APPROVE CLAIM MODAL
+================================= */
+
 .approve-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 20px;
+
+  background: rgba(3, 3, 10, 0.72);
+
+  backdrop-filter: blur(10px);
+
   z-index: 9999;
+
+  animation: approveFadeIn 0.2s ease;
 }
+
+/* =================================
+   MODAL
+================================= */
 
 .approve-modal {
   width: 100%;
   max-width: 500px;
-  background: #ffffff;
-  color: #111827;
-  border-radius: 20px;
+
+  box-sizing: border-box;
+
   padding: 30px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+
+  color: #f8fafc;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(23, 23, 42, 0.97),
+      rgba(12, 12, 25, 0.98)
+    );
+
+  border: 1px solid rgba(139, 92, 246, 0.2);
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.55),
+    0 0 50px rgba(99, 102, 241, 0.08);
+
+  backdrop-filter: blur(20px);
+
+  animation: approveScaleIn 0.25s ease;
 }
 
+/* =================================
+   SUCCESS ICON
+================================= */
+
 .approve-modal-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #d1fae5;
-  color: #059669;
+  width: 52px;
+  height: 52px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  margin-bottom: 18px;
+
+  border-radius: 15px;
+
+  background: rgba(16, 185, 129, 0.1);
+
+  border: 1px solid rgba(16, 185, 129, 0.2);
+
+  color: #34d399;
+
   font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 15px;
+  font-weight: 800;
 }
 
+/* =================================
+   HEADING
+================================= */
+
 .approve-modal h2 {
-  margin-bottom: 10px;
+  margin: 0 0 10px;
+
+  color: #f8fafc;
+
+  font-size: 25px;
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
 }
 
 .approve-modal-description {
-  color: #6b7280;
-  line-height: 1.6;
-  margin-bottom: 25px;
+  margin: 0 0 25px;
+
+  color: #94a3b8;
+
+  font-size: 14px;
+
+  line-height: 1.65;
 }
+
+/* =================================
+   FORM
+================================= */
 
 .contact-field {
   margin-bottom: 18px;
@@ -49,63 +116,226 @@
 
 .contact-field label {
   display: block;
-  font-weight: 600;
+
   margin-bottom: 7px;
+
+  color: #cbd5e1;
+
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .contact-field input {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
-  font-size: 15px;
+
+  box-sizing: border-box;
+
+  padding: 13px 14px;
+
+  border: 1px solid rgba(148, 163, 184, 0.14);
+
+  border-radius: 11px;
+
   outline: none;
+
+  background: rgba(8, 8, 18, 0.8);
+
+  color: #f8fafc;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.contact-field input::placeholder {
+  color: #64748b;
 }
 
 .contact-field input:focus {
-  border-color: #6366f1;
+  border-color: rgba(129, 140, 248, 0.7);
+
+  background: rgba(10, 10, 23, 0.95);
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.12),
+    0 0 25px rgba(99, 102, 241, 0.08);
 }
+
+/* =================================
+   ERROR
+================================= */
 
 .approve-modal-error {
-  color: #dc2626;
-  font-size: 14px;
-  margin-bottom: 12px;
+  margin: 4px 0 14px;
+
+  padding: 11px 13px;
+
+  border-radius: 10px;
+
+  background: rgba(239, 68, 68, 0.08);
+
+  border: 1px solid rgba(239, 68, 68, 0.15);
+
+  color: #f87171;
+
+  font-size: 13px;
+
+  line-height: 1.5;
 }
 
+/* =================================
+   SECURITY NOTE
+================================= */
+
 .approve-modal-note {
-  font-size: 13px;
-  color: #6b7280;
-  line-height: 1.5;
-  margin-bottom: 25px;
+  margin: 5px 0 24px;
+
+  padding: 12px 14px;
+
+  border-radius: 11px;
+
+  background: rgba(99, 102, 241, 0.06);
+
+  border: 1px solid rgba(129, 140, 248, 0.1);
+
+  color: #94a3b8;
+
+  font-size: 12px;
+
+  line-height: 1.55;
 }
+
+/* =================================
+   ACTIONS
+================================= */
 
 .approve-modal-actions {
   display: flex;
+
   gap: 10px;
+
   justify-content: flex-end;
 }
 
 .approve-cancel-btn,
 .approve-confirm-btn {
-  border: none;
   padding: 12px 18px;
-  border-radius: 10px;
+
+  border-radius: 11px;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 700;
+
   cursor: pointer;
-  font-weight: 600;
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
+/* CANCEL */
 
 .approve-cancel-btn {
-  background: #e5e7eb;
-  color: #374151;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+
+  background: rgba(148, 163, 184, 0.07);
+
+  color: #cbd5e1;
 }
 
+.approve-cancel-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  background: rgba(148, 163, 184, 0.12);
+}
+
+/* APPROVE */
+
 .approve-confirm-btn {
-  background: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+
+  background:
+    linear-gradient(
+      135deg,
+      #059669,
+      #10b981
+    );
+
   color: white;
+
+  box-shadow:
+    0 8px 25px rgba(16, 185, 129, 0.14);
+}
+
+.approve-confirm-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  filter: brightness(1.08);
+
+  box-shadow:
+    0 12px 30px rgba(16, 185, 129, 0.22);
 }
 
 .approve-cancel-btn:disabled,
 .approve-confirm-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
+}
+
+/* =================================
+   ANIMATIONS
+================================= */
+
+@keyframes approveFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes approveScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 500px) {
+  .approve-modal {
+    padding: 24px;
+
+    border-radius: 19px;
+  }
+
+  .approve-modal h2 {
+    font-size: 22px;
+  }
+
+  .approve-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .approve-cancel-btn,
+  .approve-confirm-btn {
+    width: 100%;
+  }
 }

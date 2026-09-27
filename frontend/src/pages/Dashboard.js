@@ -186,13 +186,13 @@ function Dashboard() {
     📋
   </div>
 
-  <div>
-    <h2>My Claims</h2>
+  <h2>
+    My Claims
+  </h2>
 
-    <p>
-      Track the status of claims you have submitted
-    </p>
-  </div>
+  <p>
+    Track the status of claims you have submitted.
+  </p>
 </div>
 
         {isAdmin() && (
