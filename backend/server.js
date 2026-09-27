@@ -409,6 +409,14 @@ app.get(
   '/api/public-items',
   (req, res) => {
 
+    const limit = Math.min(
+      Math.max(
+        parseInt(req.query.limit, 10) || 4,
+        1
+      ),
+      20
+    );
+
     const items = db.prepare(`
       SELECT
         id,
@@ -421,8 +429,8 @@ app.get(
         created_at
       FROM items
       ORDER BY created_at DESC
-      LIMIT 6
-    `).all();
+      LIMIT ?
+    `).all(limit);
 
     res.json(items);
   }

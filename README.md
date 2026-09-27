@@ -1,164 +1,303 @@
-# 🎓 Campus Lost & Found
+🎓 Campus Lost & Found
 
-A full-stack web application that helps students **report, discover, and recover lost belongings on campus** through a secure claim and ownership-verification workflow.
+A full-stack web application that helps students report, discover, verify, and recover lost belongings on campus through a secure claim-management workflow.
 
-The platform connects students who find lost items with their potential owners, while ensuring that claims are reviewed by the person who originally reported the item.
+The platform connects students who find lost items with potential owners while keeping claim review under the control of the student who originally reported the item.
 
----
-
-## 📌 Overview
+📌 Overview
 
 Losing personal belongings on campus can be frustrating, while found items often have no reliable way to reach their owners.
 
-**Campus Lost & Found** provides a centralized platform where students can:
+Campus Lost & Found provides a centralized platform where students can:
 
-* Report items they have found
-* Browse and search reported items
-* Submit ownership claims
-* Answer ownership verification questions
-* Review and approve/reject claims
-* Track successfully recovered items
+Report items they have found
 
-The application uses **JWT authentication, protected routes, role-based access logic, and SQLite storage** to provide a secure and structured recovery process.
+Browse and search reported items
 
----
+Submit ownership claims
 
-## ✨ Key Features
+Provide item-specific verification information
 
-### 🔐 Authentication & Security
+Review and approve/reject claims
 
-* User registration and login
-* JWT-based authentication
-* Protected frontend and backend routes
-* Authenticated API requests
-* Finder-only claim review
-* Finder-only visibility of claim details
-* Ownership verification before approval
+Track the status of their own claims
 
-### 🔎 Found Item Discovery
+Securely exchange finder contact details after approval
 
-* Browse all available found items
-* Search items by name or description
-* Filter items by category
-* View item details
-* Fullscreen image preview
-* Location information for reported items
+View recovered items
 
-### 📦 Finder Mode
+Monitor platform activity through the dashboard
 
-Users who find an item can report it by providing:
+The application uses JWT authentication, protected routes, role-based access logic, Express REST APIs, SQLite storage, and controlled file uploads to provide a structured recovery process.
 
-* Item name
-* Category
-* Description
-* Found location
-* Item image
+✨ Key Features
 
-Once submitted, the item becomes available for other users to browse.
+🔐 Authentication & Security
 
-### 🙋 Claim System
+User registration and login
 
-Users who believe an item belongs to them can submit a claim request.
+Password hashing with bcrypt
 
-The claim process includes:
+JWT-based authentication
 
-1. Selecting the item
-2. Providing ownership details
-3. Answering verification questions
-4. Submitting the claim to the finder
+Protected frontend routes
 
-This helps prevent unauthorized users from simply claiming an item.
+Protected backend API endpoints
 
-### ✅ Claim Review
+Role-based access logic
 
-The user who originally reported the item can review incoming claims.
+Admin-only access to administrative functionality
+
+Finder-only claim review
+
+Claimant-specific claim history
+
+Backend authorization based on the authenticated user's identity
+
+Protected contact information for approved claimants
+
+🔎 Found Item Discovery
+
+Browse found items
+
+Search by item name or description
+
+Filter by category
+
+View item details
+
+Image preview/fullscreen viewing
+
+Location information
+
+Recently found items displayed on the landing page
+
+Landing page requests only the required number of recent items from the backend
+
+📦 Finder Mode
+
+Students who find an item can report it by providing:
+
+Item name
+
+Category
+
+Description
+
+Found location
+
+Item image
+
+Hidden verification information
+
+Once submitted, the item becomes available for potential owners to discover.
+
+🙋 Claim System
+
+Potential owners can submit claims for found items.
+
+A claim can contain:
+
+Claim reason
+
+Identifier/ownership description
+
+Lost location
+
+Lost date
+
+Additional proof
+
+The backend also prevents important invalid operations such as:
+
+Claiming your own reported item
+
+Submitting duplicate claims for the same item
+
+Claiming an item that is no longer available
+
+🧾 Finder-Side Claim Review
+
+The student who originally reported an item can review its claims.
 
 The finder can:
 
-* View ownership verification details
-* Approve a legitimate claim
-* Reject an invalid claim
+View claimant information
 
-Only the finder associated with the item can access and manage its claims.
+Review ownership reasoning
 
-### 🎒 Recovered Items
+Review verification details
 
-Once a claim is approved, the item is moved from the active listings into the **Recovered Items** archive.
+Approve a claim
 
-Users can view previously recovered items and track the platform's recovery activity.
+Reject a claim
 
-### 📊 Dashboard
+Only the finder associated with the item is authorized to manage its claims.
 
-The dashboard provides an overview of platform activity, including statistics related to:
+📋 My Claims
 
-* Found items
-* Active items
-* Claims
-* Recovered items
+Claimants have their own My Claims page.
 
----
+They can see:
 
-## 🔄 Application Workflow
+Item title
 
-```text
-┌─────────────────────┐
-│   User Registers    │
-│      / Logs In      │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│    Finder Reports   │
-│     Lost Item       │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   Item Appears in   │
-│    Browse Items     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│ Potential Owner     │
-│ Submits a Claim     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│ Ownership Details   │
-│   Are Verified      │
-└──────────┬──────────┘
-           │
-           ▼
-      ┌────┴────┐
-      │         │
-      ▼         ▼
-┌──────────┐ ┌──────────┐
-│ Approve  │ │  Reject  │
-│  Claim   │ │  Claim   │
-└────┬─────┘ └──────────┘
-     │
-     ▼
-┌─────────────────────┐
-│  Item Moved to      │
-│ Recovered Items     │
-└─────────────────────┘
-```
+Category
 
----
+Location
 
-## 🖥️ Application Structure
+Submission date
 
-The application is divided into a **React frontend** and a **Node.js/Express backend**.
+Pending status
 
-```text
+Approved status
+
+Rejected status
+
+The page is scoped to the authenticated user, meaning users cannot request another user's claim history through the frontend or API.
+
+📞 Secure Contact Sharing
+
+After approving a claim, the finder can provide:
+
+Email
+
+Phone number
+
+Or both
+
+The contact details are stored separately and are only accessible to the approved claimant.
+
+The approval workflow also:
+
+Approves the selected claim
+
+Rejects other pending claims for the same item
+
+Stores the finder contact details
+
+Marks the item as returned
+
+Contact information is never exposed through the normal claim listing.
+
+🎒 Recovered Items
+
+Once a claim is approved, the item moves from the active found-item workflow into the Recovered Items section.
+
+This provides a record of successfully recovered items and keeps returned items separate from active listings.
+
+📊 Dashboard
+
+The dashboard provides an overview of platform activity, including:
+
+Reported items
+
+Available items
+
+Returned items
+
+Pending claims
+
+User actions
+
+Finder-side claim review
+
+My Claims
+
+Admin functionality for authorized administrators
+
+🛡️ Admin Access
+
+Administrators have access to protected administrative functionality.
+
+Admin access is controlled on both the frontend and backend rather than relying only on hiding UI elements.
+
+Normal users cannot access the administrative route or administrative operations simply by navigating directly to the URL.
+
+🔔 User Experience
+
+The application includes reusable UI components for:
+
+Toast notifications
+
+Confirmation dialogs
+
+Approval/contact dialogs
+
+Reusable back navigation
+
+Loading and empty states
+
+Responsive layouts
+
+🔄 Application Workflow
+
+┌─────────────────────────┐
+│     User Registers      │
+│        / Logs In        │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│    Finder Reports       │
+│      Found Item         │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│ Item Appears in Browse  │
+│      Found Items        │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│ Potential Owner Submits │
+│         Claim           │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│ Ownership Information   │
+│      Is Reviewed        │
+└────────────┬────────────┘
+             │
+       ┌─────┴─────┐
+       │           │
+       ▼           ▼
+┌────────────┐ ┌────────────┐
+│  Approve   │ │   Reject   │
+│   Claim    │ │   Claim    │
+└─────┬──────┘ └────────────┘
+      │
+      ▼
+┌─────────────────────────┐
+│ Other Pending Claims    │
+│      Are Rejected       │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│ Finder Contact Details  │
+│   Shared Securely       │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│ Item Marked as Returned │
+│   / Recovered           │
+└─────────────────────────┘
+
+🖥️ Application Structure
+
+The application is divided into a React frontend and a Node.js/Express backend.
+
 campus-lost-found/
 │
 ├── backend/
 │   ├── server.js
 │   ├── package.json
-│   └── campus_lnf.db
+│   ├── campus_lnf.db
+│   └── uploads/
 │
 ├── frontend/
 │   ├── public/
@@ -166,7 +305,11 @@ campus-lost-found/
 │   │
 │   └── src/
 │       ├── components/
-│       │   └── Navbar.js
+│       │   ├── AdminRoute.js
+│       │   ├── ApproveClaimModal.js
+│       │   ├── BackButton.js
+│       │   ├── ConfirmModal.js
+│       │   └── Toast.js
 │       │
 │       ├── pages/
 │       │   ├── LandingPage.js
@@ -177,257 +320,587 @@ campus-lost-found/
 │       │   ├── LoserMode.js
 │       │   ├── ClaimPage.js
 │       │   ├── ReviewClaims.js
-│       │   └── ReturnedItems.js
+│       │   ├── MyClaims.js
+│       │   ├── ReturnedItems.js
+│       │   └── Admin/
 │       │
 │       ├── services/
+│       │   └── auth.js
 │       │
 │       ├── App.js
 │       └── index.js
 │
+├── .gitignore
 └── README.md
-```
 
----
+Local database files and uploaded images should remain outside version control. See .gitignore.
 
-## 🛠️ Tech Stack
+🛠️ Tech Stack
 
-| Layer          | Technology            |
-| -------------- | --------------------- |
-| Frontend       | React.js              |
-| Routing        | React Router          |
-| Styling        | CSS3                  |
-| Backend        | Node.js               |
-| API            | Express.js            |
-| Database       | SQLite                |
-| Authentication | JSON Web Tokens (JWT) |
-| File Uploads   | Multer                |
+Layer
 
----
+Technology
 
-## 🏗️ Architecture
+Frontend
 
-```text
-                 ┌────────────────────┐
-                 │      React.js      │
-                 │     Frontend       │
-                 └─────────┬──────────┘
-                           │
-                    HTTP / REST API
-                           │
-                           ▼
-                 ┌────────────────────┐
-                 │    Express.js      │
-                 │      Backend       │
-                 └─────────┬──────────┘
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-              ▼                         ▼
-       ┌─────────────┐          ┌─────────────┐
-       │ JWT Auth    │          │   Multer    │
-       │ Middleware  │          │ File Upload │
-       └─────────────┘          └─────────────┘
-                           │
-                           ▼
-                 ┌────────────────────┐
-                 │      SQLite        │
-                 │     Database       │
-                 └────────────────────┘
-```
+React.js
 
----
+Routing
 
-## 🔐 Security
+React Router
+
+Styling
+
+CSS3
+
+Backend
+
+Node.js
+
+API
+
+Express.js
+
+Database
+
+SQLite
+
+Database Driver
+
+better-sqlite3
+
+Authentication
+
+JSON Web Tokens (JWT)
+
+Password Security
+
+bcryptjs
+
+File Uploads
+
+Multer
+
+API Communication
+
+REST / HTTP
+
+Version Control
+
+Git / GitHub
+
+🏗️ Architecture
+
+                  ┌──────────────────────┐
+                  │       React.js       │
+                  │      Frontend        │
+                  └──────────┬───────────┘
+                             │
+                        HTTP / REST
+                             │
+                             ▼
+                  ┌──────────────────────┐
+                  │      Express.js      │
+                  │       Backend       │
+                  └──────────┬───────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+              ▼              ▼              ▼
+       ┌────────────┐ ┌────────────┐ ┌────────────┐
+       │ JWT Auth   │ │   Multer   │ │   REST     │
+       │ Middleware │ │ File Upload│ │  Endpoints │
+       └────────────┘ └────────────┘ └────────────┘
+                             │
+                             ▼
+                  ┌──────────────────────┐
+                  │       SQLite         │
+                  │       Database       │
+                  └──────────────────────┘
+
+🔐 Security
 
 Security is built into the application's core workflow.
 
-### JWT Authentication
+JWT Authentication
 
 Users authenticate through JWT-based login sessions. Protected API endpoints require a valid authentication token.
 
-### Protected Routes
+Password Hashing
+
+Passwords are stored as bcrypt hashes rather than plaintext passwords.
+
+Protected Routes
 
 Sensitive pages and API operations are restricted to authenticated users.
 
-### Finder Authorization
+Role-Based Authorization
 
-Claim information is not publicly accessible. Only the finder who originally reported an item can review its claims.
+Administrative functionality is protected using the authenticated user's role.
 
-### Ownership Verification
+Finder Authorization
 
-Claimants must provide item-specific ownership information before a finder can approve their claim.
+Claim management is restricted to the finder who originally reported the item.
 
-### Controlled Recovery Workflow
+Claimant Scoping
 
-An item is only moved into the recovered archive after the associated finder explicitly approves a claim.
+The My Claims API identifies the claimant from the authenticated JWT rather than accepting an arbitrary user ID from the frontend.
 
----
+Contact Privacy
 
-## 🚀 Getting Started
+Finder contact information is only returned when:
 
-### Prerequisites
+The requested claim belongs to the authenticated claimant.
+
+The claim has been approved.
+
+This prevents unrelated users from accessing contact details.
+
+Controlled Recovery Workflow
+
+An item is only marked as returned after the associated finder approves a pending claim.
+
+When a claim is approved, other pending claims for that same item are rejected.
+
+🚀 Getting Started
+
+Prerequisites
 
 Make sure you have the following installed:
 
-* Node.js
-* npm
-* Git
+Node.js
 
-### 1. Clone the Repository
+npm
 
-```bash
+Git
+
+1. Clone the Repository
+
 git clone <your-repository-url>
 cd campus-lost-found
-```
 
-### 2. Start the Backend
+2. Start the Backend
 
 Open a terminal:
 
-```bash
 cd backend
 npm install
 npm start
-```
 
-The backend server will run on:
+The backend server runs on:
 
-```text
 http://localhost:5000
-```
 
-### 3. Start the Frontend
+The application creates the SQLite database/tables when the backend starts.
+
+3. Start the Frontend
 
 Open another terminal:
 
-```bash
 cd frontend
 npm install
 npm start
-```
 
-The frontend will run on:
+The frontend runs on:
 
-```text
 http://localhost:3000
-```
 
----
+🧑‍💻 Usage
 
-## 🧑‍💻 Usage
-
-### 1. Create an Account
+1. Create an Account
 
 Register using the application and log in with your credentials.
 
-### 2. Report a Found Item
+2. Report a Found Item
 
-Enter **Finder Mode** and provide:
+Enter Finder Mode and provide:
 
-* Item name
-* Category
-* Description
-* Found location
-* Image
+Item name
 
-### 3. Browse Items
+Category
 
-Open **Browse Items** to search through reported items.
+Description
+
+Found location
+
+Image
+
+Verification information
+
+3. Browse Items
+
+Open Browse Items to search through reported items.
 
 You can:
 
-* Search by item name
-* Search descriptions
-* Filter by category
-* Open item images in fullscreen
+Search by item name
 
-### 4. Submit a Claim
+Search descriptions
+
+Filter by category
+
+View item images
+
+Inspect item details
+
+4. Submit a Claim
 
 If you recognize an item as yours, open the claim page and provide the requested ownership verification details.
 
-### 5. Finder Reviews the Claim
+5. Track Your Claim
 
-The person who reported the item receives access to the claim details and reviews the provided information.
+Open My Claims to see whether your claim is:
 
-### 6. Claim Decision
+Pending
 
-The finder can either:
+Approved
 
-**Approve** → The item is marked as recovered.
+Rejected
 
-**Reject** → The item remains available for potential legitimate claims.
+6. Finder Reviews the Claim
 
-### 7. View Recovered Items
+The student who reported the item reviews the claim and the supplied ownership information.
 
-Approved items are moved into the **Recovered Items** archive.
+7. Approve and Share Contact
 
----
+If the finder approves the claim, they provide an email address, phone number, or both.
 
-## 📂 Main Pages
+The contact information is then securely available to the approved claimant.
 
-| Page           | Purpose                            |
-| -------------- | ---------------------------------- |
-| Landing Page   | Introduction to the platform       |
-| Login          | User authentication                |
-| Register       | New user registration              |
-| Dashboard      | Platform statistics and navigation |
-| Finder Mode    | Report found items                 |
-| Loser Mode     | Browse and search found items      |
-| Claim Page     | Submit an ownership claim          |
-| Review Claims  | Finder-side claim management       |
-| Returned Items | View recovered items               |
+8. Item Recovery
 
----
+The approved item is marked as returned and appears in the Recovered Items section.
 
-## 🔮 Future Enhancements
+🌐 API Overview
 
-The project can be extended with additional functionality such as:
+The backend exposes REST endpoints for authentication, item management, claims, recovery, statistics, and administrative operations.
 
-* 👨‍💼 Admin dashboard
-* 📧 Email notifications
-* 🔔 Real-time claim notifications
-* 🔍 Advanced search and filtering
-* 👤 User profiles
-* 🤖 AI-assisted ownership verification
-* 📈 Campus-wide analytics
-* 📍 Interactive campus maps
-* 📱 Progressive Web App support
-* 🖼️ AI-powered image similarity matching
-* 🏷️ Automatic item categorization
-* 📊 Recovery-rate analytics
+Important endpoints include:
 
----
+Method
 
-## 🎯 Project Goals
+Endpoint
+
+Purpose
+
+POST
+
+/api/register
+
+Register a user
+
+POST
+
+/api/login
+
+Authenticate a user
+
+GET
+
+/api/me
+
+Get authenticated user information
+
+GET
+
+/api/items
+
+Get authenticated item data
+
+POST
+
+/api/items
+
+Report a found item
+
+GET
+
+/api/public-items
+
+Get public recent items
+
+GET
+
+/api/returned-items
+
+Get recovered items
+
+POST
+
+/api/claims
+
+Submit a claim
+
+GET
+
+/api/claims
+
+Get finder-side claims
+
+GET
+
+/api/my-claims
+
+Get the authenticated user's claims
+
+GET
+
+/api/my-claims/:id/contact
+
+Get contact for an approved own claim
+
+POST
+
+/api/claims/:id/approve
+
+Approve a claim and share contact
+
+POST
+
+/api/claims/:id/reject
+
+Reject a claim
+
+GET
+
+/api/stats
+
+Get platform statistics
+
+👑 Making a User an Admin
+
+Newly registered users are created with the default role:
+
+user
+
+To make a user an administrator, update the user's role directly in the local SQLite database.
+
+Step 1 — Register the User
+
+First, create the user normally through the Register page.
+
+For example:
+
+User ID: admin1
+Password: ********
+
+Step 2 — Open the SQLite Database
+
+Stop the backend if it is currently running, then open:
+
+backend/campus_lnf.db
+
+You can use a SQLite database viewer such as DB Browser for SQLite, or the SQLite command-line interface.
+
+Step 3 — Change the User Role
+
+Run:
+
+UPDATE users
+SET role = 'admin'
+WHERE user_id = 'admin1';
+
+Replace admin1 with the actual user's user_id.
+
+You can verify the change with:
+
+SELECT id, user_id, role
+FROM users
+WHERE user_id = 'admin1';
+
+The result should show:
+
+role = admin
+
+Step 4 — Restart the Backend
+
+Start the backend again:
+
+cd backend
+npm start
+
+Step 5 — Log Out and Log In Again
+
+The user's role is included in the JWT when they log in. Therefore, after changing the database role, the user should log out and log in again so a new token containing:
+
+role: "admin"
+
+is issued.
+
+Step 6 — Access the Admin Panel
+
+After logging in again, the user will have access to the Admin Panel from the dashboard.
+
+The application checks the user's role on protected admin routes, so simply navigating to /admin is not enough for a normal user to gain administrative access.
+
+Important: The database file is local development data and should not be committed to GitHub. The project's .gitignore excludes *.db files.
+
+📂 Main Pages
+
+Page
+
+Purpose
+
+Landing Page
+
+Introduction, platform statistics, recent items, features, FAQ
+
+Login
+
+User authentication
+
+Register
+
+New user registration
+
+Dashboard
+
+Platform statistics and navigation
+
+Finder Mode
+
+Report found items
+
+Loser Mode
+
+Browse and search found items
+
+Claim Page
+
+Submit an ownership claim
+
+My Claims
+
+Track submitted claim statuses
+
+Review Claims
+
+Finder-side claim management
+
+Returned Items
+
+View recovered items
+
+Admin Panel
+
+Protected administrative functionality
+
+🎨 UI & UX
+
+The application includes a reusable component-based interface with:
+
+Responsive landing page
+
+Glassmorphism-style cards
+
+Gradient visual system
+
+Toast notifications
+
+Confirmation modals
+
+Approval/contact modal
+
+Reusable back navigation
+
+Loading states
+
+Empty states
+
+Responsive item grids
+
+Image previews
+
+Protected navigation
+
+The landing page displays a limited number of recent items using the backend's public-items endpoint rather than loading the entire item collection.
+
+📁 Local Data & Git
+
+The project uses local SQLite storage and local uploaded images during development.
+
+These should not be committed to GitHub.
+
+The .gitignore should exclude:
+
+node_modules/
+
+frontend/node_modules/
+backend/node_modules/
+
+*.db
+*.db-shm
+*.db-wal
+
+.env
+
+uploads/*
+backend/uploads/*
+
+This keeps local users, claims, item records, contact records, and uploaded images out of version control.
+
+🔮 Future Enhancements
+
+Potential future improvements include:
+
+📧 Email notifications
+
+🔔 Real-time claim notifications
+
+🔍 Advanced search and filtering
+
+👤 User profiles
+
+🤖 AI-assisted ownership verification
+
+📈 Campus-wide analytics
+
+📍 Interactive campus maps
+
+📱 Progressive Web App support
+
+🖼️ AI-powered image similarity matching
+
+🏷️ Automatic item categorization
+
+📊 Recovery-rate analytics
+
+📱 Mobile application
+
+🎯 Project Goals
 
 The main goals of Campus Lost & Found are to:
 
-* Create a centralized campus lost-and-found system
-* Make reporting found items simple
-* Make searching for lost belongings faster
-* Reduce fraudulent ownership claims
-* Provide a structured verification process
-* Give finders control over claim approval
-* Maintain a record of successfully recovered items
+Create a centralized campus lost-and-found system
 
----
+Make reporting found items simple
 
-## 📌 Future Vision
+Make searching for lost belongings faster
 
-The long-term vision is to turn Campus Lost & Found into an **intelligent campus recovery platform**.
+Reduce fraudulent ownership claims
 
-With AI-powered image matching, smart item categorization, automated notifications, and campus analytics, the platform could significantly reduce the time required to reunite students with their belongings.
+Provide a structured verification process
 
----
+Give finders control over claim approval
 
-## 👥 Project
+Protect claimant and finder information
 
-**Campus Lost & Found**
+Provide secure contact sharing after approval
 
-A full-stack web application built to make recovering lost belongings on campus **faster, safer, and more organized**.
+Maintain a record of successfully recovered items
 
----
+📌 Future Vision
 
-## ⭐ If You Like This Project
+The long-term vision is to turn Campus Lost & Found into an intelligent campus recovery platform.
+
+With AI-powered image matching, smart item categorization, automated notifications, and campus analytics, the platform could reduce the time required to reunite students with their belongings while improving the reliability of the recovery process.
+
+👥 Project
+
+Campus Lost & Found
+
+A full-stack web application built to make recovering lost belongings on campus faster, safer, and more organized.
+
+⭐ If You Like This Project
 
 If you find this project useful or interesting, consider giving the repository a ⭐ on GitHub.

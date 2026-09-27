@@ -29,18 +29,27 @@ function LandingPage() {
   };
 
   const fetchRecentItems = async () => {
-    try {
-      const res = await fetch(
-        "http://localhost:5000/api/public-items"
-      );
+  try {
+    const res = await fetch(
+  "http://localhost:5000/api/public-items?limit=4"
+);
 
-      const data = await res.json();
+    const data = await res.json();
 
-      setRecentItems(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    const recent = data
+      .sort(
+        (a, b) =>
+          new Date(b.created_at) -
+          new Date(a.created_at)
+      )
+      .slice(0, 4);
+
+    setRecentItems(recent);
+
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const faqs = [
     {
@@ -288,7 +297,7 @@ function LandingPage() {
                 <h3>Found Item</h3>
 
                 <p>
-                  📍 {item.address}
+                  📍 {item.location}
                 </p>
 
                 <small>
